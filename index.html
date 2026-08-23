@@ -3,38 +3,85 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lectures</title>
+  <title>IDM Lectures</title>
   <style>
     :root { color-scheme: light dark; }
+
     body {
       font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      max-width: 40rem;
-      margin: 4rem auto;
+      max-width: 34rem;
+      margin: 5rem auto;
       padding: 0 1.5rem;
     }
-    h1 { margin-bottom: 0.25rem; }
-    ol {
-      padding-left: 1.25rem;
-      display: grid;
-      gap: 0.4rem;
+
+    h1 {
+      margin: 0 0 0.15rem;
+      font-size: 1.6rem;
     }
-    a { text-decoration: none; }
-    a:hover { text-decoration: underline; }
+
+    p.subtitle {
+      margin: 0 0 2rem;
+      opacity: 0.6;
+      font-size: 0.95rem;
+    }
+
+    .weeks {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.7rem;
+    }
+
+    .weeks a {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.6rem;
+      border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+      text-decoration: none;
+      color: inherit;
+      font-size: 1.4rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      transition: background-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .weeks a:hover {
+      background-color: color-mix(in srgb, currentColor 8%, transparent);
+      transform: translateY(-2px);
+    }
+
+    .weeks span {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.6rem;
+      border: 1px dashed color-mix(in srgb, currentColor 12%, transparent);
+      font-size: 1.4rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      opacity: 0.35;
+      cursor: default;
+    }
   </style>
 </head>
 <body>
-  <h1>Weekly Lectures</h1>
-  <ol id="weeks"></ol>
+  <h1>IDM Lectures</h1>
+  <p class="subtitle">Weekly slides</p>
+  <div class="weeks" id="weeks"></div>
   <script>
-    const list = document.getElementById('weeks');
+    const grid = document.getElementById('weeks');
+    const RELEASED_THROUGH = 1; // bump as each week's slides go up
+
     for (let i = 1; i <= 15; i++) {
       const w = String(i).padStart(2, '0');
-      const li = document.createElement('li');
-      const a = document.createElement('a');
-      a.href = `./week${w}/`;
-      a.textContent = `Week ${w}`;
-      li.appendChild(a);
-      list.appendChild(li);
+      const released = i <= RELEASED_THROUGH;
+      const el = document.createElement(released ? 'a' : 'span');
+      if (released) el.href = `./week${w}/`;
+      el.textContent = w;
+      el.setAttribute('aria-label', released ? `Week ${w}` : `Week ${w} (not yet available)`);
+      grid.appendChild(el);
     }
   </script>
 </body>
