@@ -10,6 +10,10 @@ const weeks = Array.from({ length: WEEK_COUNT }, (_, i) => String(i + 1).padStar
 // Vite's dev server serves any of these directly without this list; it's
 // only needed so `vite build` knows to emit all of them.
 export default defineConfig({
+  // Relative asset paths so the built site works when served from a GitHub
+  // Pages project subpath (e.g. /idm-lectures/) without hardcoding the repo
+  // name here — renaming the repo later needs no config change.
+  base: './',
   build: {
     rollupOptions: {
       input: {
