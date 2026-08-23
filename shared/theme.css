@@ -1,0 +1,16 @@
+/*
+ * Shared theme overrides applied on top of the reveal.js base theme.
+ * Edit here to restyle every week's lecture at once.
+ */
+
+:root {
+  --r-heading-font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-main-font: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.reveal .slides section .week-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.5em;
+  opacity: 0.6;
+}

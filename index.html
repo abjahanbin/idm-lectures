@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lectures</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      max-width: 40rem;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+    }
+    h1 { margin-bottom: 0.25rem; }
+    ol {
+      padding-left: 1.25rem;
+      display: grid;
+      gap: 0.4rem;
+    }
+    a { text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Weekly Lectures</h1>
+  <ol id="weeks"></ol>
+  <script>
+    const list = document.getElementById('weeks');
+    for (let i = 1; i <= 15; i++) {
+      const w = String(i).padStart(2, '0');
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `./week${w}/`;
+      a.textContent = `Week ${w}`;
+      li.appendChild(a);
+      list.appendChild(li);
+    }
+  </script>
+</body>
+</html>
