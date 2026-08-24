@@ -22,15 +22,22 @@
         </div>
       </section>
 
-      <!-- 2. Bio -->
+      <!-- 2. Bio — text on the left (left-aligned), self-portrait gif on
+           the right. Gif set by main.js (see the bio grid comment for why
+           new URL(..., import.meta.url) rather than a plain src string). -->
       <section class="impact-slide" data-movement="1" data-movement-name="Introduction">
         <div class="impact-inner">
-          <h2 class="bio-name">Amir B. Jahanbin</h2>
-          <div class="bio-roles">
-            <span class="bio-role bg-yellow">ANIMATOR</span>
-            <span class="bio-role bg-blue">ILLUSTRATOR</span>
-            <span class="bio-role bg-green">GAME DESIGNER</span>
-            <span class="bio-role bg-pink">EDUCATOR</span>
+          <div class="bio-row">
+            <h2 class="bio-name">Amir B. Jahanbin</h2>
+            <div class="bio-roles-row">
+              <div class="bio-roles">
+                <span class="bio-role bg-yellow">ANIMATOR</span>
+                <span class="bio-role bg-blue">ILLUSTRATOR</span>
+                <span class="bio-role bg-green">GAME DESIGNER</span>
+                <span class="bio-role bg-pink">EDUCATOR</span>
+              </div>
+              <div class="bio-portrait" id="bio-portrait"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -81,10 +88,45 @@
         </div>
       </section>
 
-      <!-- 7. Provocation — text-only, held on screen -->
+      <!-- 7. Embedded video, full-bleed background iframe. Muted (no
+           audio requested) and starts at 2:30 (start=150, seconds) —
+           see slide 4's comment for the muted/autoplay browser-policy
+           background. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/8vGDPaezi2M?autoplay=1&mute=1&start=150&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 8. DJ Boring pair — visual only, no text. Two images side by
+           side, populated by main.js (same new URL(...) pattern as the
+           other media slides). -->
       <section class="impact-slide" data-movement="1" data-movement-name="Introduction">
         <div class="impact-inner">
-          <p class="impact-statement">So what is a computer, actually?</p>
+          <div class="media-pair">
+            <div class="media-pair-item" id="djboring-front"></div>
+            <div class="media-pair-item" id="djboring-back"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Riso assets — visual only, no text. 2x2 arrangement (2 rows,
+           2 per row), populated by main.js. Each row's height is fixed
+           and each image's width is auto — natural aspect ratio, no
+           cropping, no letterboxing (see the .riso-grid comment in
+           theme.css for why that's the robust way to do this). -->
+      <section class="impact-slide" data-movement="1" data-movement-name="Introduction">
+        <div class="impact-inner">
+          <div class="riso-grid" id="riso-grid"></div>
+        </div>
+      </section>
+
+      <!-- 10. Drawing machine trio — visual only, no text. Three images
+           side by side, all square-cropped, populated by main.js. -->
+      <section class="impact-slide" data-movement="1" data-movement-name="Introduction">
+        <div class="impact-inner">
+          <div class="media-trio" id="drawingmachine-trio"></div>
         </div>
       </section>
 
@@ -93,7 +135,7 @@
       <!-- ============================================================ -->
 
       <section data-movement="2" data-movement-name="Conversation">
-        <!-- 8. Same question, now open to the room — entry point of the stack, movement 2's divider -->
+        <!-- 11. Same question, now open to the room — entry point of the stack, movement 2's divider -->
         <section class="impact-slide divider" style="--divider-color: var(--accent-blue);">
           <div class="impact-inner">
             <span class="movement-kicker">Movement 2</span>
@@ -102,28 +144,28 @@
           </div>
         </section>
 
-        <!-- 8a. "A calculator" -->
+        <!-- 11a. "A calculator" -->
         <section>
           <h3>"A calculator"</h3>
         </section>
 
-        <!-- 8b. "A brain" -->
+        <!-- 11b. "A brain" -->
         <section>
           <h3>"A brain"</h3>
         </section>
 
-        <!-- 8c. "A tool that follows instructions" -->
+        <!-- 11c. "A tool that follows instructions" -->
         <section>
           <h3>"A tool that follows instructions"</h3>
         </section>
 
-        <!-- 8d. Open/blank catch-all -->
+        <!-- 11d. Open/blank catch-all -->
         <section class="open-slide">
           <h3>&hellip;</h3>
         </section>
       </section>
 
-      <!-- 9. Return to horizontal path — synthesis, single sentence -->
+      <!-- 12. Return to horizontal path — synthesis, single sentence -->
       <section class="impact-slide" data-movement="2" data-movement-name="Conversation">
         <div class="impact-inner">
           <p class="impact-statement">Every answer assumes the computer waits, executes, stops.</p>
@@ -134,7 +176,7 @@
       <!-- MOVEMENT 3 — Computers as Instruments                        -->
       <!-- ============================================================ -->
 
-      <!-- 10. Reframe (movement 3's divider) -->
+      <!-- 13. Reframe (movement 3's divider) -->
       <section class="impact-slide divider" data-movement="3" data-movement-name="Instruments"
                 style="--divider-color: var(--accent-green);">
         <div class="impact-inner">
@@ -143,38 +185,38 @@
         </div>
       </section>
 
-      <!-- 11. Daphne Oram title slide -->
+      <!-- 14. Daphne Oram title slide -->
       <section data-movement="3" data-movement-name="Instruments">
         <h2>Daphne Oram</h2>
         <p>1925&ndash;2003 &mdash; [one-line context]</p>
       </section>
 
-      <!-- 12. Oramics machine -->
+      <!-- 15. Oramics machine -->
       <section data-movement="3" data-movement-name="Instruments">
         <h3>The Oramics Machine</h3>
         <div class="media-placeholder"><!-- TODO: Oramics machine footage --> Image/video: Oramics machine</div>
       </section>
 
-      <!-- 13. Oramics detail -->
+      <!-- 16. Oramics detail -->
       <section data-movement="3" data-movement-name="Instruments">
         <h3>Drawing Sound</h3>
         <p>Drawn onto film, read back in real time</p>
         <div class="media-placeholder"><!-- TODO: Oramics film/drawing detail footage --> Image/video: drawing on film, real-time reading</div>
       </section>
 
-      <!-- 14. NIME title -->
+      <!-- 17. NIME title -->
       <section data-movement="3" data-movement-name="Instruments">
         <h2>NIME</h2>
         <p>New Instruments for Realtime Music Performance &mdash; an active, ongoing field</p>
       </section>
 
-      <!-- 15. NIME example -->
+      <!-- 18. NIME example -->
       <section data-movement="3" data-movement-name="Instruments">
         <h3>A Contemporary Real-Time Instrument</h3>
         <div class="media-placeholder"><!-- TODO: NIME demo video --> Video: contemporary real-time instrument demo</div>
       </section>
 
-      <!-- 16. Discussion branch point -->
+      <!-- 19. Discussion branch point -->
       <section data-movement="3" data-movement-name="Instruments">
         <section class="impact-slide">
           <div class="impact-inner">
@@ -184,22 +226,22 @@
           </div>
         </section>
 
-        <!-- 16a. Skateboard -->
+        <!-- 19a. Skateboard -->
         <section>
           <h3>Skateboard</h3>
         </section>
 
-        <!-- 16b. Bike -->
+        <!-- 19b. Bike -->
         <section>
           <h3>Bike</h3>
         </section>
 
-        <!-- 16c. Game controller -->
+        <!-- 19c. Game controller -->
         <section>
           <h3>Game Controller</h3>
         </section>
 
-        <!-- 16d. Open/blank catch-all -->
+        <!-- 19d. Open/blank catch-all -->
         <section class="open-slide">
           <h3>&hellip;</h3>
         </section>
@@ -209,7 +251,7 @@
       <!-- MOVEMENT 4 — Break                                            -->
       <!-- ============================================================ -->
 
-      <!-- 17. Break — visual only, minimal/no text. Movement 4's divider,
+      <!-- 20. Break — visual only, minimal/no text. Movement 4's divider,
            but keeps its own solid-color fill instead of the Voronoi bg. -->
       <section class="impact-slide" data-movement="4" data-movement-name="Break" data-background-color="#00e58e">
         <!-- TODO: break visual (timer, generative loop, etc.) -->
@@ -219,7 +261,7 @@
       <!-- MOVEMENT 5 — What You'll Do This Semester                    -->
       <!-- ============================================================ -->
 
-      <!-- 18. "This Semester" title (movement 5's divider) -->
+      <!-- 21. "This Semester" title (movement 5's divider) -->
       <section class="impact-slide divider" data-movement="5" data-movement-name="This Semester"
                 style="--divider-color: var(--accent-yellow);">
         <div class="impact-inner">
@@ -228,43 +270,43 @@
         </div>
       </section>
 
-      <!-- 19. Tools overview -->
+      <!-- 22. Tools overview -->
       <section data-movement="5" data-movement-name="This Semester">
         <h2>Tools</h2>
         <p>Unreal Engine &middot; Niagara &middot; MetaSounds &middot; Blueprints</p>
       </section>
 
-      <!-- 20. "No coding required" reassurance -->
+      <!-- 23. "No coding required" reassurance -->
       <section data-movement="5" data-movement-name="This Semester">
         <h2>No Coding Required</h2>
         <p>You're building an instrument, not writing a program</p>
       </section>
 
-      <!-- 21. Project 1 preview -->
+      <!-- 24. Project 1 preview -->
       <section data-movement="5" data-movement-name="This Semester">
         <h3>Project 1</h3>
         <p>MIDI / OSC &rarr; Niagara</p>
       </section>
 
-      <!-- 22. Project 2 preview -->
+      <!-- 25. Project 2 preview -->
       <section data-movement="5" data-movement-name="This Semester">
         <h3>Project 2</h3>
         <p>MetaSounds + camera / mic input</p>
       </section>
 
-      <!-- 23. Project 3 preview -->
+      <!-- 26. Project 3 preview -->
       <section data-movement="5" data-movement-name="This Semester">
         <h3>Project 3</h3>
         <p>Final instrument &mdash; input of your choosing</p>
       </section>
 
-      <!-- 24. Examples — instructor's own work -->
+      <!-- 27. Examples — instructor's own work -->
       <section data-movement="5" data-movement-name="This Semester">
         <h3>Examples &mdash; My Work</h3>
         <div class="media-placeholder"><!-- TODO: webcam smear / Lenia-style visuals --> Image/video: webcam smear, Lenia-style visuals</div>
       </section>
 
-      <!-- 25. Examples — external/canonical work -->
+      <!-- 28. Examples — external/canonical work -->
       <section data-movement="5" data-movement-name="This Semester">
         <h3>Examples &mdash; Canonical Work</h3>
         <div class="media-placeholder"><!-- TODO: external real-time audiovisual reference --> Image/video: external real-time audiovisual work</div>
@@ -274,7 +316,7 @@
       <!-- MOVEMENT 6 — Emergence                                        -->
       <!-- ============================================================ -->
 
-      <!-- 26. "Emergence" title (movement 6's divider) -->
+      <!-- 29. "Emergence" title (movement 6's divider) -->
       <section class="impact-slide divider" data-movement="6" data-movement-name="Emergence"
                 style="--divider-color: var(--accent-blue);">
         <div class="impact-inner">
@@ -283,26 +325,26 @@
         </div>
       </section>
 
-      <!-- 27. Simple example — boids/CA -->
+      <!-- 30. Simple example — boids/CA -->
       <section data-movement="6" data-movement-name="Emergence">
         <h3>Boids / Cellular Automata</h3>
         <div class="media-placeholder"><!-- TODO: boids or CA visual --> Video: flocking or cellular automata simulation</div>
       </section>
 
-      <!-- 28. Instructor's own emergent work — callback to Movement 1 -->
+      <!-- 31. Instructor's own emergent work — callback to Movement 1 -->
       <section data-movement="6" data-movement-name="Emergence">
         <h3>My Own Emergent Work</h3>
         <div class="media-placeholder"><!-- TODO: Lenia-style / emergent piece, callback to slide 6 --> Image/video: Lenia-style emergent work</div>
       </section>
 
-      <!-- 29. Synthesis -->
+      <!-- 32. Synthesis -->
       <section class="impact-slide" data-movement="6" data-movement-name="Emergence">
         <div class="impact-inner">
           <p class="impact-statement">The instrument becomes a system complex enough to surprise the person playing it.</p>
         </div>
       </section>
 
-      <!-- 30. Explicit tie-back to Oram/NIME -->
+      <!-- 33. Explicit tie-back to Oram/NIME -->
       <section data-movement="6" data-movement-name="Emergence">
         <h3>Back to Oram, Back to NIME</h3>
         <p>This is where that historical thread lands</p>
@@ -312,7 +354,7 @@
       <!-- MOVEMENT 7 — Close                                            -->
       <!-- ============================================================ -->
 
-      <!-- 31. Final question — text-only, held on screen. Movement 7's divider. -->
+      <!-- 34. Final question — text-only, held on screen. Movement 7's divider. -->
       <section class="impact-slide divider" data-movement="7" data-movement-name="Close"
                 style="--divider-color: var(--accent-green);">
         <div class="impact-inner">

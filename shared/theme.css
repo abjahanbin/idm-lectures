@@ -133,14 +133,24 @@
    inventing new color rules. */
 .bio-name {
   font-weight: 400;
+  white-space: nowrap;
+  /* Taken out of flow, floating above .bio-roles-row, so it doesn't
+     count toward .bio-row's height — that height (and so .impact-inner's
+     vertical centering) needs to match the roles-row/portrait alone for
+     the gif to land on the slide's true vertical center. Without this,
+     centering the name+roles-row as one block pushes the portrait below
+     center by roughly half the name's height. */
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 0.9em;
 }
 
 .bio-roles {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.4em;
-  margin-top: 0.9em;
 }
 
 .bio-role {
@@ -150,6 +160,47 @@
   font-weight: 400;
   letter-spacing: 0.02em;
   padding: 0.12em 0.45em;
+  white-space: nowrap;
+}
+
+/* Bio slide layout: name on its own line, then a row below it pairing
+   the roles stack with the portrait. The portrait sits in its own
+   nested row (.bio-roles-row) alongside .bio-roles specifically — not
+   .bio-row as a whole — so align-items:stretch matches its height to
+   the roles stack alone (ANIMATOR's top to EDUCATOR's bottom), not to
+   the roles stack *plus* the name above it. An earlier version stretched
+   against the whole text block, which put the portrait's top flush with
+   the name instead of ANIMATOR. */
+.bio-row {
+  position: relative; /* anchors .bio-name's absolute positioning */
+  text-align: left;
+}
+
+.bio-roles-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 3rem;
+}
+
+/* Sized in JS (main.js), not via aspect-ratio + align-items:stretch —
+   that seemed like the right CSS-only approach, but a flex item sized
+   that way can't correctly contribute to an ancestor's shrink-to-fit
+   width calculation (its width depends on a stretched height that
+   isn't resolved until after that intrinsic-sizing pass runs). The
+   symptom was bio-row's computed width silently matching just the
+   name's width instead of the wider roles-row, overflowing the
+   portrait off the right edge while leaving a gap on the left.
+   Measuring .bio-roles's real rendered height after layout and setting
+   width/height explicitly sidesteps the ambiguity entirely. */
+.bio-roles-row .bio-portrait {
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .reveal .slides section .week-kicker,
@@ -279,6 +330,43 @@
   height: 82%;
 }
 
+/* 2x2 riso arrangement (see week01's slide 9, populated by main.js) —
+   2 rows, 2 images per row. Real <img> elements, not background-image:
+   uniform grid cells (this used to be display:grid with 1fr tracks,
+   background-size:cover) inherently crop or letterbox anything that
+   isn't the cell's own aspect ratio, and 3 of these 4 riso images are
+   square while one (fullsheetTall.jpg) is notably taller than wide —
+   no single cell shape fits both without cropping or black bars.
+   Fixing each ROW's height (not each cell's width) and letting width
+   auto-derive from each image's own aspect ratio sidesteps that
+   entirely — width can vary freely per image with no downside, so
+   there's nothing forcing a crop. This also structurally rules out the
+   vertical-overflow bug hit twice already on this same slide (stacking
+   items whose combined natural height exceeds the container): height
+   is fixed by design here, not computed from content. */
+.riso-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  height: 84%;
+}
+
+.riso-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  height: calc(50% - 0.4rem);
+}
+
+.riso-row img {
+  display: block;
+  height: 100%;
+  width: auto;
+  border-radius: 0.4rem;
+}
+
 /* Rendered as a CSS background-image, not an <img> with object-fit:
    Chromium has a known issue where object-fit:cover positions an
    animated GIF's first frame correctly but drifts once later frames
@@ -293,10 +381,34 @@
   background-repeat: no-repeat;
 }
 
+/* Three media items side by side, all square-cropped (see week01 slide
+   10). aspect-ratio:1 + background-size:cover on each item, not a fixed
+   height like .media-pair — that way the row sizes itself from the
+   available width, and each item's own aspect-ratio keeps it a true
+   square regardless of what that ends up being. */
+.media-trio {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  width: 94%;
+}
+
+.media-trio .media-trio-item {
+  flex: 1;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /* Two media items side by side, full height (see week01 slide 6). Same
    background-image technique as .gif-cell, for the same reason. */
 .media-pair {
   display: flex;
+  justify-content: center;
   gap: 0.9rem;
   width: 92%;
   height: 82%;
@@ -317,6 +429,19 @@
    with visible black bars and leaving it shorter than the gif's box. */
 #reframe-image {
   flex: 1.7;
+}
+
+/* DJ Boring pair — square frames, no crop. flex:0 0 auto + aspect-ratio:1
+   (not flex:1, which would stretch each to half the row's width) sizes
+   each square to the row's own height, so it stays square regardless of
+   how wide .media-pair's 92%-width box ends up; background-size:contain
+   shows the full image, letterboxed rather than cropped. */
+#djboring-front,
+#djboring-back {
+  flex: 0 0 auto;
+  width: auto;
+  aspect-ratio: 1;
+  background-size: contain;
 }
 
 /* Dashed placeholder box standing in for an image/video that will be

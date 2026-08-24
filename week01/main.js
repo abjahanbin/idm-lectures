@@ -2,6 +2,43 @@ import { initReveal } from '../shared/reveal-init.js';
 
 initReveal();
 
+// --- Slide 2: self-portrait gif ------------------------------------------
+// Sized in JS to exactly match .bio-roles's rendered height (ANIMATOR's
+// top to EDUCATOR's bottom) — a CSS-only version of this (aspect-ratio +
+// align-items:stretch) couldn't correctly contribute its width back into
+// the ancestor's shrink-to-fit centering calculation, which overflowed
+// the portrait off the right edge of the slide. offsetHeight, not
+// getBoundingClientRect(), because it's the element's own logical CSS
+// pixel size — unaffected by reveal.js's CSS transform:scale() on the
+// whole deck, which getBoundingClientRect() would report *after*.
+
+function initBioPortrait() {
+  const portraitEl = document.getElementById('bio-portrait');
+  const rolesEl = document.querySelector('.bio-roles');
+  if (!portraitEl || !rolesEl) return;
+
+  const portraitUrl = new URL('./assets/intro/SelfPortrait_abj.gif', import.meta.url).href;
+  portraitEl.style.backgroundImage = `url("${portraitUrl}")`;
+
+  function sizeToMatchRoles() {
+    const size = rolesEl.offsetHeight;
+    if (size > 0) {
+      portraitEl.style.width = `${size}px`;
+      portraitEl.style.height = `${size}px`;
+    }
+  }
+
+  // Wait for the real webfont (not a fallback's metrics) before measuring.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(sizeToMatchRoles);
+  } else {
+    sizeToMatchRoles();
+  }
+  window.addEventListener('resize', sizeToMatchRoles);
+}
+
+initBioPortrait();
+
 // --- Slide 3: rotating bio GIF grid -------------------------------------
 // 3x2 grid, each cell on its own timer, swapping to a random not-currently-
 // shown gif from week01/assets/bio/. Browsers don't expose any event for
@@ -107,3 +144,74 @@ function initReframeMediaPair() {
 }
 
 initReframeMediaPair();
+
+// --- Slide 8: DJ Boring pair, side by side --------------------------------
+
+function initDjBoringPair() {
+  const frontEl = document.getElementById('djboring-front');
+  const backEl = document.getElementById('djboring-back');
+  if (!frontEl || !backEl) return;
+
+  const frontUrl = new URL('./assets/djboring/DJBoring_LikeWaterFront_abj.jpg', import.meta.url).href;
+  const backUrl = new URL('./assets/djboring/DJBoring_LikeWaterBack_abj.jpg', import.meta.url).href;
+
+  frontEl.style.backgroundImage = `url("${frontUrl}")`;
+  backEl.style.backgroundImage = `url("${backUrl}")`;
+}
+
+initDjBoringPair();
+
+// --- Slide 9: riso assets, 2x2 grid ---------------------------------------
+
+const RISO_NAMES = [
+  'RENDERWIGGLE-Converted2.gif',
+  'Riso_Full01.jpg',
+  'coinspinriso.gif',
+  'fullsheetTall.jpg',
+];
+
+function initRisoGrid() {
+  const grid = document.getElementById('riso-grid');
+  if (!grid) return;
+
+  const rows = [
+    document.createElement('div'),
+    document.createElement('div'),
+  ];
+  rows.forEach((row) => {
+    row.className = 'riso-row';
+    grid.appendChild(row);
+  });
+
+  // 2 per row, in RISO_NAMES order.
+  RISO_NAMES.forEach((name, i) => {
+    const img = document.createElement('img');
+    img.alt = '';
+    img.src = new URL(`./assets/riso/${name}`, import.meta.url).href;
+    rows[Math.floor(i / 2)].appendChild(img);
+  });
+}
+
+initRisoGrid();
+
+// --- Slide 10: drawing machine trio, side by side, all square crop -------
+
+const DRAWINGMACHINE_NAMES = [
+  'DrawingMachine_Bottle_abj.gif',
+  'DrawingMachine_FlowerTriptych_abj.jpeg',
+  'DrawingMachine_MakingOf_abj.gif',
+];
+
+function initDrawingMachineTrio() {
+  const trio = document.getElementById('drawingmachine-trio');
+  if (!trio) return;
+
+  DRAWINGMACHINE_NAMES.forEach((name) => {
+    const cell = document.createElement('div');
+    cell.className = 'media-trio-item';
+    cell.style.backgroundImage = `url("${new URL(`./assets/drawingmachine/${name}`, import.meta.url).href}")`;
+    trio.appendChild(cell);
+  });
+}
+
+initDrawingMachineTrio();
