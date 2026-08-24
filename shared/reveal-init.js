@@ -5,19 +5,30 @@ import 'reveal.js/reveal.css';
 import 'reveal.js/theme/black.css';
 import './theme.css';
 import { createVoronoiBackground } from './voronoi-bg.js';
+import { createPerlinNoiseBackground } from './perlin-noise-bg.js';
+import { createTruchetBackground } from './truchet-bg.js';
 
 // Bottom bar's progress-fill color, cycled by movement number (1-indexed).
 // Deliberately just the 4 accent colors — grey would read as "no
 // progress" if it ever landed on the fill.
 const MOVEMENT_COLORS = ['#fff269', '#57c4fa', '#00e58e', '#56b5d3'];
 
-// Voronoi background palette — yellow/blue/green/teal/pink (see
+// Divider-background palette — yellow/blue/green/teal/pink (see
 // shared/theme.css --accent-*), independent of the bar's cycle above.
 // No grey here — it read as a dead/washed-out cell against the others.
-const VORONOI_COLORS = ['#fff269', '#57c4fa', '#00e58e', '#56b5d3', '#f6b5d3'];
+const BG_COLORS = ['#fff269', '#57c4fa', '#00e58e', '#56b5d3', '#f6b5d3'];
 
 function colorForMovement(n) {
   return MOVEMENT_COLORS[(n - 1) % MOVEMENT_COLORS.length];
+}
+
+// Rotates the palette array by n positions — used so a group of related
+// divider slides (e.g. the "what is a computer" breakout responses) can
+// share the same background shader but each read as visually distinct,
+// via data-bg-rotate="n" on the slide.
+function rotatePalette(colors, n) {
+  const shift = ((n % colors.length) + colors.length) % colors.length;
+  return colors.slice(shift).concat(colors.slice(0, shift));
 }
 
 /**
@@ -41,9 +52,24 @@ export function initReveal(config = {}) {
   const movementEl = bar.querySelector('.bottom-bar__movement');
   const countEl = bar.querySelector('.bottom-bar__count');
 
-  // Animated Voronoi background, shown only behind divider slides.
-  const bg = createVoronoiBackground(VORONOI_COLORS);
-  document.body.appendChild(bg.canvas);
+  // Divider-slide backgrounds. Voronoi is the default for every divider;
+  // a slide can opt into a different one via data-bg="name" (see slide
+  // 11 in week01/index.html for perlin-noise). Registry keyed by that
+  // same string so adding another background later is just one more
+  // entry here, no changes to the slide-switching logic below.
+  //
+  // reaction-diffusion-bg.js (a real Gray-Scott simulation, not a
+  // formula) was tried here first and worked, but reads as visually
+  // "frozen" once its pattern fills the available space and settles —
+  // not obvious from a single test screenshot, only from actually
+  // watching it for a while. Left the file in place in case it's worth
+  // revisiting with different parameters, just not registered here.
+  const backgrounds = {
+    voronoi: createVoronoiBackground(BG_COLORS),
+    'perlin-noise': createPerlinNoiseBackground(BG_COLORS),
+    truchet: createTruchetBackground(BG_COLORS),
+  };
+  Object.values(backgrounds).forEach((bg) => document.body.appendChild(bg.canvas));
 
   const deck = new Reveal({
     hash: true,
@@ -74,8 +100,17 @@ export function initReveal(config = {}) {
     const total = deck.getTotalSlides();
     countEl.textContent = `${String(past + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
 
-    // Voronoi background only behind the title slide + movement dividers.
-    bg.setVisible(current.closest('.divider') !== null);
+    // Background only behind divider slides — which one depends on that
+    // slide's own data-bg attribute (falls back to voronoi if unset),
+    // and its palette order on data-bg-rotate (falls back to 0/unrotated).
+    const dividerEl = current.closest('.divider');
+    const activeName = dividerEl ? dividerEl.dataset.bg || 'voronoi' : null;
+    const rotate = dividerEl ? Number(dividerEl.dataset.bgRotate) || 0 : 0;
+    Object.entries(backgrounds).forEach(([name, bg]) => {
+      const isActive = name === activeName;
+      bg.setVisible(isActive);
+      if (isActive) bg.setColors(rotatePalette(BG_COLORS, rotate));
+    });
   }
 
   deck.on('slidechanged', updateStatus);

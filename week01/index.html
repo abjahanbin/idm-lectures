@@ -111,14 +111,20 @@
         </div>
       </section>
 
-      <!-- 9. Riso assets — visual only, no text. 2x2 arrangement (2 rows,
-           2 per row), populated by main.js. Each row's height is fixed
-           and each image's width is auto — natural aspect ratio, no
-           cropping, no letterboxing (see the .riso-grid comment in
-           theme.css for why that's the robust way to do this). -->
+      <!-- 9. Riso assets — visual only, no text. fullsheetTall.jpg (the
+           one non-square image) gets its own full-height column; the 3
+           square images sit in a 2x2 grid beside it, bottom-right cell
+           left empty. The whole quad grid is sized as a single square
+           block matching the featured image's height (set in main.js),
+           with CSS Grid dividing that square evenly into 4 cells — see
+           the .riso-grid comment in theme.css for why this approach
+           (not each cell sized individually) is the robust one here. -->
       <section class="impact-slide" data-movement="1" data-movement-name="Introduction">
         <div class="impact-inner">
-          <div class="riso-grid" id="riso-grid"></div>
+          <div class="riso-grid" id="riso-grid">
+            <img class="riso-featured" id="riso-featured" alt="" />
+            <div class="riso-quad" id="riso-quad"></div>
+          </div>
         </div>
       </section>
 
@@ -135,115 +141,244 @@
       <!-- ============================================================ -->
 
       <section data-movement="2" data-movement-name="Conversation">
-        <!-- 11. Same question, now open to the room — entry point of the stack, movement 2's divider -->
-        <section class="impact-slide divider" style="--divider-color: var(--accent-blue);">
+        <!-- 11. Same question, now open to the room — entry point of the stack, movement 2's divider.
+             data-bg opts this one divider into the animated Perlin/FBM
+             noise background instead of the deck-wide default (Voronoi). -->
+        <section class="impact-slide divider" data-bg="perlin-noise" style="--divider-color: var(--accent-blue);">
           <div class="impact-inner">
-            <span class="movement-kicker">Movement 2</span>
-            <h2>What is a computer, actually?</h2>
-            <p class="impact-byline">Open to the room</p>
+            <h2>What is a computer?</h2>
           </div>
         </section>
 
-        <!-- 11a. "A calculator" -->
-        <section>
-          <h3>"A calculator"</h3>
+        <!-- 11a. "A calculator". Same perlin-noise background as the
+             parent question slide — data-bg-rotate cycles the palette
+             order per breakout so each response feels distinct even
+             though it's the same shader (see reveal-init.js). Starts at
+             1, not 0 — slide 11 itself has no data-bg-rotate, which
+             defaults to 0, so starting the breakouts at 0 too gave it
+             and the first breakout the identical rotation (no visible
+             switch between them, which is what this was). -->
+        <section class="impact-slide divider" data-bg="perlin-noise" data-bg-rotate="1" style="--divider-color: var(--accent-blue);">
+          <div class="impact-inner">
+            <h3>"A calculator"</h3>
+          </div>
         </section>
 
         <!-- 11b. "A brain" -->
-        <section>
-          <h3>"A brain"</h3>
+        <section class="impact-slide divider" data-bg="perlin-noise" data-bg-rotate="2" style="--divider-color: var(--accent-blue);">
+          <div class="impact-inner">
+            <h3>"A brain"</h3>
+          </div>
         </section>
 
         <!-- 11c. "A tool that follows instructions" -->
-        <section>
-          <h3>"A tool that follows instructions"</h3>
+        <section class="impact-slide divider" data-bg="perlin-noise" data-bg-rotate="3" style="--divider-color: var(--accent-blue);">
+          <div class="impact-inner">
+            <h3>"A tool that follows instructions"</h3>
+          </div>
         </section>
 
-        <!-- 11d. Open/blank catch-all -->
-        <section class="open-slide">
-          <h3>&hellip;</h3>
+        <!-- 11d. "A black box" -->
+        <section class="impact-slide divider" data-bg="perlin-noise" data-bg-rotate="4" style="--divider-color: var(--accent-blue);">
+          <div class="impact-inner">
+            <h3>"A black box"</h3>
+          </div>
         </section>
-      </section>
 
-      <!-- 12. Return to horizontal path — synthesis, single sentence -->
-      <section class="impact-slide" data-movement="2" data-movement-name="Conversation">
-        <div class="impact-inner">
-          <p class="impact-statement">Every answer assumes the computer waits, executes, stops.</p>
-        </div>
+        <!-- 11e. "A universal machine" -->
+        <section class="impact-slide divider" data-bg="perlin-noise" data-bg-rotate="0" style="--divider-color: var(--accent-blue);">
+          <div class="impact-inner">
+            <h3>"A universal machine"</h3>
+          </div>
+        </section>
+
+        <!-- 11f. "A gaming device" -->
+        <section class="impact-slide divider" data-bg="perlin-noise" data-bg-rotate="1" style="--divider-color: var(--accent-blue);">
+          <div class="impact-inner">
+            <h3>"A gaming device"</h3>
+          </div>
+        </section>
+
+        <!-- 11g. "The internet" -->
+        <section class="impact-slide divider" data-bg="perlin-noise" data-bg-rotate="2" style="--divider-color: var(--accent-blue);">
+          <div class="impact-inner">
+            <h3>"The internet"</h3>
+          </div>
+        </section>
+
+        <!-- 11h. "A mirror" -->
+        <section class="impact-slide divider" data-bg="perlin-noise" data-bg-rotate="3" style="--divider-color: var(--accent-blue);">
+          <div class="impact-inner">
+            <h3>"A mirror"</h3>
+          </div>
+        </section>
+
+        <!-- 11i. Open/blank catch-all — kept last as a general fallback,
+             after all the named answers above. -->
+        <section class="impact-slide divider open-slide" data-bg="perlin-noise" data-bg-rotate="4" style="--divider-color: var(--accent-blue);">
+          <div class="impact-inner">
+            <h3>&hellip;</h3>
+          </div>
+        </section>
       </section>
 
       <!-- ============================================================ -->
       <!-- MOVEMENT 3 — Computers as Instruments                        -->
       <!-- ============================================================ -->
 
-      <!-- 13. Reframe (movement 3's divider) -->
-      <section class="impact-slide divider" data-movement="3" data-movement-name="Instruments"
-                style="--divider-color: var(--accent-green);">
+      <!-- 12. Daphne Oram title slide. Movement 3 now opens directly here
+           — the synthesis line ("every answer assumes...") and the
+           "What if it doesn't wait?" reframe divider that used to sit
+           between the branch discussion and this were both removed.
+           That also means Movement 3 has no divider slide of its own
+           anymore (no title-card moment, no Voronoi/movement-color
+           entry cue) — flagging that in case it's not what was
+           intended, since removing those two was what removed it. -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Instruments">
         <div class="impact-inner">
-          <span class="movement-kicker">Movement 3</span>
-          <h2>What if it doesn't wait?</h2>
+          <div class="photo-figure">
+            <div class="photo-image" id="oram-image"></div>
+            <p class="photo-caption">Daphne Oram (1925 - 2003)</p>
+          </div>
         </div>
       </section>
 
-      <!-- 14. Daphne Oram title slide -->
-      <section data-movement="3" data-movement-name="Instruments">
-        <h2>Daphne Oram</h2>
-        <p>1925&ndash;2003 &mdash; [one-line context]</p>
+      <!-- 13. Oramics machine. Embedded video, full-bleed background
+           iframe, autoplay with sound (no mute param) — see slide 4's
+           comment for the muted/autoplay browser-policy background. -->
+      <section
+        data-movement="3"
+        data-movement-name="Instruments"
+        data-background-iframe="https://www.youtube.com/embed/RTHXwgTpy90?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 13b. Daphne Oram quote. Plain impact-slide (not .divider — no
+           WebGL background canvas wanted here), centered, the quote text
+           itself sits on a highlighter-color box. box-decoration-break
+           makes each wrapped line get its own highlighted box rather
+           than one background that only wraps around the first/last
+           line, for a true highlighter-pen look across the two lines
+           this wraps to. -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Instruments">
+        <div class="impact-inner">
+          <p class="impact-statement">
+            <span class="quote-mark">&ldquo;I want machines and computers to be an extension of the arm of the composer&rdquo;</span>
+          </p>
+          <cite class="quote-cite">&mdash; Daphne Oram</cite>
+        </div>
       </section>
 
-      <!-- 15. Oramics machine -->
-      <section data-movement="3" data-movement-name="Instruments">
-        <h3>The Oramics Machine</h3>
-        <div class="media-placeholder"><!-- TODO: Oramics machine footage --> Image/video: Oramics machine</div>
+      <!-- 14. DAW example -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Instruments">
+        <div class="impact-inner">
+          <div class="photo-figure">
+            <div class="photo-image" id="daw-image"></div>
+            <p class="photo-caption">DAW (Digital Audio Workstation)</p>
+          </div>
+        </div>
       </section>
 
-      <!-- 16. Oramics detail -->
-      <section data-movement="3" data-movement-name="Instruments">
-        <h3>Drawing Sound</h3>
-        <p>Drawn onto film, read back in real time</p>
-        <div class="media-placeholder"><!-- TODO: Oramics film/drawing detail footage --> Image/video: drawing on film, real-time reading</div>
-      </section>
+      <!-- 15. NIME title. Embedded video, full-bleed background iframe,
+           autoplay with sound (no mute param) starting at 8:50 (530s) —
+           see slide 4's comment for the muted/autoplay browser-policy
+           background. -->
+      <section
+        data-movement="3"
+        data-movement-name="Instruments"
+        data-background-iframe="https://www.youtube.com/embed/xGza-N4I6V0?autoplay=1&start=530&rel=0"
+        data-background-interactive
+      ></section>
 
-      <!-- 17. NIME title -->
-      <section data-movement="3" data-movement-name="Instruments">
-        <h2>NIME</h2>
-        <p>New Instruments for Realtime Music Performance &mdash; an active, ongoing field</p>
-      </section>
+      <!-- 16. NIME example. Embedded video, full-bleed background iframe,
+           autoplay with sound (no mute param) from the beginning (no
+           start param) — see slide 4's comment for the muted/autoplay
+           browser-policy background. Source URL had list=RD.../
+           start_radio params (YouTube's related-mix "radio" queuing for
+           the watch page) — dropped here since those aren't meaningful
+           on a plain single-video embed. -->
+      <section
+        data-movement="3"
+        data-movement-name="Instruments"
+        data-background-iframe="https://www.youtube.com/embed/CY1RAs7x74w?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
 
-      <!-- 18. NIME example -->
-      <section data-movement="3" data-movement-name="Instruments">
-        <h3>A Contemporary Real-Time Instrument</h3>
-        <div class="media-placeholder"><!-- TODO: NIME demo video --> Video: contemporary real-time instrument demo</div>
-      </section>
+      <!-- 16b. Embedded video, full-bleed background iframe, autoplay
+           with sound (no mute param) starting at 2:25 (145s) — see slide
+           4's comment for the muted/autoplay browser-policy background. -->
+      <section
+        data-movement="3"
+        data-movement-name="Instruments"
+        data-background-iframe="https://www.youtube.com/embed/STRMcmj-gHc?autoplay=1&start=145&rel=0"
+        data-background-interactive
+      ></section>
 
-      <!-- 19. Discussion branch point -->
+      <!-- 16c. Embedded video, full-bleed background iframe, autoplay
+           with sound (no mute param) starting at 0:30 (30s) — see slide
+           4's comment for the muted/autoplay browser-policy background. -->
+      <section
+        data-movement="3"
+        data-movement-name="Instruments"
+        data-background-iframe="https://www.youtube.com/embed/kIDlOokfHy8?autoplay=1&start=30&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 17. Discussion branch point — formatted the same as slide 11
+           (movement 2's "what is a computer?" branch entry): a divider
+           with an animated WebGL texture background and the heading on
+           a highlighter-color box. Uses Truchet tiles here rather than
+           Perlin/Voronoi, both already used elsewhere in the deck, so
+           this branch reads as visually distinct from movement 2's.
+           --divider-color follows movement 3's own color in the bar's
+           cycle (green), same as the Oram quote slide's highlight. -->
       <section data-movement="3" data-movement-name="Instruments">
-        <section class="impact-slide">
+        <section class="impact-slide divider" data-bg="truchet" style="--divider-color: var(--accent-green);">
           <div class="impact-inner">
-            <span class="movement-kicker">Discussion</span>
-            <h2>Name an instrument you already know</h2>
-            <p class="impact-byline">&hellip;that isn't musical</p>
+            <h2>If you had a computer that responded to you in real time &mdash;<br>what would you want it to respond&nbsp;to?</h2>
           </div>
         </section>
 
-        <!-- 19a. Skateboard -->
-        <section>
-          <h3>Skateboard</h3>
+        <!-- 17a. Voice -->
+        <section class="impact-slide divider" data-bg="truchet" data-bg-rotate="1" style="--divider-color: var(--accent-green);">
+          <div class="impact-inner">
+            <h3>Voice</h3>
+          </div>
         </section>
 
-        <!-- 19b. Bike -->
-        <section>
-          <h3>Bike</h3>
+        <!-- 17b. Movement -->
+        <section class="impact-slide divider" data-bg="truchet" data-bg-rotate="2" style="--divider-color: var(--accent-green);">
+          <div class="impact-inner">
+            <h3>Movement</h3>
+          </div>
         </section>
 
-        <!-- 19c. Game controller -->
-        <section>
-          <h3>Game Controller</h3>
+        <!-- 17c. Touch -->
+        <section class="impact-slide divider" data-bg="truchet" data-bg-rotate="3" style="--divider-color: var(--accent-green);">
+          <div class="impact-inner">
+            <h3>Touch</h3>
+          </div>
         </section>
 
-        <!-- 19d. Open/blank catch-all -->
-        <section class="open-slide">
-          <h3>&hellip;</h3>
+        <!-- 17d. Gaze -->
+        <section class="impact-slide divider" data-bg="truchet" data-bg-rotate="4" style="--divider-color: var(--accent-green);">
+          <div class="impact-inner">
+            <h3>Gaze</h3>
+          </div>
+        </section>
+
+        <!-- 17e. Facial expression -->
+        <section class="impact-slide divider" data-bg="truchet" data-bg-rotate="0" style="--divider-color: var(--accent-green);">
+          <div class="impact-inner">
+            <h3>Facial Expression</h3>
+          </div>
+        </section>
+
+        <!-- 17f. Open/blank catch-all -->
+        <section class="impact-slide divider open-slide" data-bg="truchet" data-bg-rotate="1" style="--divider-color: var(--accent-green);">
+          <div class="impact-inner">
+            <h3>&hellip;</h3>
+          </div>
         </section>
       </section>
 
@@ -251,7 +386,7 @@
       <!-- MOVEMENT 4 — Break                                            -->
       <!-- ============================================================ -->
 
-      <!-- 20. Break — visual only, minimal/no text. Movement 4's divider,
+      <!-- 18. Break — visual only, minimal/no text. Movement 4's divider,
            but keeps its own solid-color fill instead of the Voronoi bg. -->
       <section class="impact-slide" data-movement="4" data-movement-name="Break" data-background-color="#00e58e">
         <!-- TODO: break visual (timer, generative loop, etc.) -->
@@ -261,105 +396,83 @@
       <!-- MOVEMENT 5 — What You'll Do This Semester                    -->
       <!-- ============================================================ -->
 
-      <!-- 21. "This Semester" title (movement 5's divider) -->
+      <!-- 19. "This Semester" title (movement 5's divider) -->
       <section class="impact-slide divider" data-movement="5" data-movement-name="This Semester"
                 style="--divider-color: var(--accent-yellow);">
         <div class="impact-inner">
-          <span class="movement-kicker">Movement 5</span>
           <h2>This Semester</h2>
         </div>
       </section>
 
-      <!-- 22. Tools overview -->
-      <section data-movement="5" data-movement-name="This Semester">
-        <h2>Tools</h2>
-        <p>Unreal Engine &middot; Niagara &middot; MetaSounds &middot; Blueprints</p>
-      </section>
-
-      <!-- 23. "No coding required" reassurance -->
-      <section data-movement="5" data-movement-name="This Semester">
-        <h2>No Coding Required</h2>
-        <p>You're building an instrument, not writing a program</p>
-      </section>
-
-      <!-- 24. Project 1 preview -->
-      <section data-movement="5" data-movement-name="This Semester">
-        <h3>Project 1</h3>
-        <p>MIDI / OSC &rarr; Niagara</p>
-      </section>
-
-      <!-- 25. Project 2 preview -->
-      <section data-movement="5" data-movement-name="This Semester">
-        <h3>Project 2</h3>
-        <p>MetaSounds + camera / mic input</p>
-      </section>
-
-      <!-- 26. Project 3 preview -->
-      <section data-movement="5" data-movement-name="This Semester">
-        <h3>Project 3</h3>
-        <p>Final instrument &mdash; input of your choosing</p>
-      </section>
-
-      <!-- 27. Examples — instructor's own work -->
-      <section data-movement="5" data-movement-name="This Semester">
-        <h3>Examples &mdash; My Work</h3>
-        <div class="media-placeholder"><!-- TODO: webcam smear / Lenia-style visuals --> Image/video: webcam smear, Lenia-style visuals</div>
-      </section>
-
-      <!-- 28. Examples — external/canonical work -->
-      <section data-movement="5" data-movement-name="This Semester">
-        <h3>Examples &mdash; Canonical Work</h3>
-        <div class="media-placeholder"><!-- TODO: external real-time audiovisual reference --> Image/video: external real-time audiovisual work</div>
-      </section>
-
-      <!-- ============================================================ -->
-      <!-- MOVEMENT 6 — Emergence                                        -->
-      <!-- ============================================================ -->
-
-      <!-- 29. "Emergence" title (movement 6's divider) -->
-      <section class="impact-slide divider" data-movement="6" data-movement-name="Emergence"
-                style="--divider-color: var(--accent-blue);">
+      <!-- 20. Tools overview — formatted like slide 2 (bio): each item on
+           its own highlighter-color line, reusing .bio-role. Centered
+           here (not left-aligned like the bio) since there's no portrait
+           to sit alongside it. -->
+      <section class="impact-slide" data-movement="5" data-movement-name="This Semester">
         <div class="impact-inner">
-          <span class="movement-kicker">Movement 6</span>
-          <h2>Emergence</h2>
+          <h2>Tools</h2>
+          <div class="tools-stack">
+            <span class="bio-role bg-yellow">Unreal Engine</span>
+            <span class="bio-role bg-blue">Niagara</span>
+            <span class="bio-role bg-green">MetaSounds</span>
+            <span class="bio-role bg-pink">Blueprints</span>
+          </div>
         </div>
       </section>
 
-      <!-- 30. Simple example — boids/CA -->
-      <section data-movement="6" data-movement-name="Emergence">
-        <h3>Boids / Cellular Automata</h3>
-        <div class="media-placeholder"><!-- TODO: boids or CA visual --> Video: flocking or cellular automata simulation</div>
-      </section>
-
-      <!-- 31. Instructor's own emergent work — callback to Movement 1 -->
-      <section data-movement="6" data-movement-name="Emergence">
-        <h3>My Own Emergent Work</h3>
-        <div class="media-placeholder"><!-- TODO: Lenia-style / emergent piece, callback to slide 6 --> Image/video: Lenia-style emergent work</div>
-      </section>
-
-      <!-- 32. Synthesis -->
-      <section class="impact-slide" data-movement="6" data-movement-name="Emergence">
+      <!-- 21. "No coding required" reassurance -->
+      <section class="impact-slide" data-movement="5" data-movement-name="This Semester">
         <div class="impact-inner">
-          <p class="impact-statement">The instrument becomes a system complex enough to surprise the person playing it.</p>
+          <h2>No Coding Required</h2>
+          <p class="impact-byline">You're building an instrument, not writing a program</p>
         </div>
       </section>
 
-      <!-- 33. Explicit tie-back to Oram/NIME -->
-      <section data-movement="6" data-movement-name="Emergence">
-        <h3>Back to Oram, Back to NIME</h3>
-        <p>This is where that historical thread lands</p>
+      <!-- 22. Project 1 preview -->
+      <section class="impact-slide" data-movement="5" data-movement-name="This Semester" style="--divider-color: var(--accent-yellow);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">Project 1</h3>
+          <p class="impact-byline">MIDI / OSC &rarr; Niagara</p>
+        </div>
       </section>
+
+      <!-- 23. Project 2 preview -->
+      <section class="impact-slide" data-movement="5" data-movement-name="This Semester" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">Project 2</h3>
+          <p class="impact-byline">MetaSounds + camera / mic input</p>
+        </div>
+      </section>
+
+      <!-- 24. Project 3 preview -->
+      <section class="impact-slide" data-movement="5" data-movement-name="This Semester" style="--divider-color: var(--accent-green);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">Project 3</h3>
+          <p class="impact-byline">Final instrument &mdash; input of your choosing</p>
+        </div>
+      </section>
+
+      <!-- 24b. Syllabus. Full-bleed background iframe, same pattern as the
+           video embeds elsewhere in this deck (see slide 4's comment) —
+           reuses that same crop fix automatically since it targets any
+           data-background-iframe generically, not just video. Interactive
+           so it can actually be scrolled/read during class, not just
+           autoplaying like the video ones. -->
+      <section
+        data-movement="5"
+        data-movement-name="This Semester"
+        data-background-iframe="https://fau.simplesyllabus.com/doc/dkke1gmqz/Fall-2026-1-Full-Term-MMC-3711-003-Interactive-Digital-Media?mode=view"
+        data-background-interactive
+      ></section>
 
       <!-- ============================================================ -->
       <!-- MOVEMENT 7 — Close                                            -->
       <!-- ============================================================ -->
 
-      <!-- 34. Final question — text-only, held on screen. Movement 7's divider. -->
+      <!-- 32. Close — visual only, no text. Movement 7's divider, texture
+           held on screen for the final discussion. -->
       <section class="impact-slide divider" data-movement="7" data-movement-name="Close"
                 style="--divider-color: var(--accent-green);">
-        <div class="impact-inner">
-          <p class="impact-statement">If a computer can be an instrument, and instruments can surprise the person playing them&nbsp;&mdash; who's really making the art?</p>
-        </div>
       </section>
 
     </div>

@@ -4,6 +4,8 @@
 // setVisible() and only shows it behind the title slide + movement
 // dividers (see .divider-bg / .divider in theme.css and week01/index.html).
 
+import { hexToRgb01, linkProgram, createFullscreenQuad, bindFullscreenQuad } from './webgl-utils.js';
+
 const VERT_SRC = `
 attribute vec2 aPosition;
 void main() {
@@ -89,23 +91,6 @@ void main() {
 }
 `;
 
-function hexToRgb01(hex) {
-  const n = parseInt(hex.replace('#', ''), 16);
-  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
-}
-
-function compileShader(gl, type, source) {
-  const shader = gl.createShader(type);
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.warn('voronoi-bg: shader compile error', gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
-  return shader;
-}
-
 /**
  * Creates a fixed, fullscreen animated Voronoi-noise canvas.
  * @param {string[]} colors exactly 5 hex colors used for the cells — the
@@ -121,28 +106,12 @@ export function createVoronoiBackground(colors) {
   const gl = canvas.getContext('webgl', { antialias: true }) || canvas.getContext('experimental-webgl');
   if (!gl) return noop; // No WebGL — degrade silently, canvas just stays hidden.
 
-  const vertShader = compileShader(gl, gl.VERTEX_SHADER, VERT_SRC);
-  const fragShader = compileShader(gl, gl.FRAGMENT_SHADER, FRAG_SRC);
-  if (!vertShader || !fragShader) return noop;
-
-  const program = gl.createProgram();
-  gl.attachShader(program, vertShader);
-  gl.attachShader(program, fragShader);
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.warn('voronoi-bg: program link error', gl.getProgramInfoLog(program));
-    return noop;
-  }
+  const program = linkProgram(gl, VERT_SRC, FRAG_SRC);
+  if (!program) return noop;
   gl.useProgram(program);
 
-  const quad = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
-  const buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, quad, gl.STATIC_DRAW);
-
-  const aPosition = gl.getAttribLocation(program, 'aPosition');
-  gl.enableVertexAttribArray(aPosition);
-  gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+  const quadBuffer = createFullscreenQuad(gl);
+  bindFullscreenQuad(gl, program, quadBuffer);
 
   const uResolution = gl.getUniformLocation(program, 'uResolution');
   const uTime = gl.getUniformLocation(program, 'uTime');

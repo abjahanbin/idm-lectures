@@ -27,6 +27,10 @@
   --accent-teal: #56b5d3;
   --accent-pink: #f6b5d3;
   --accent-grey: #e7e7e7;
+
+  /* Shared with .bottom-bar's own height and the background-iframe
+     clearance fix below, so they can't drift out of sync. */
+  --bottom-bar-height: 52px;
 }
 
 /* Utility classes for coloring text/highlights while writing slide content. */
@@ -104,6 +108,24 @@
   padding: 0.1em 0.25em;
 }
 
+/* Same highlighter-box treatment as the divider headings above, but as
+   an opt-in class rather than gated on .divider — for a heading on a
+   plain (non-divider) slide that should still read as a title, e.g. the
+   Project 1/2/3 previews (week01 slides 22-24). Also keys off
+   --divider-color so it follows the same set-it-inline-per-slide
+   convention as everything else that uses that variable. Selector is
+   prefixed the same way as the divider h1/h2 rule above (three classes
+   deep) — matching only .title-highlight itself isn't specific enough
+   to beat reveal's own theme color on h1-h3, which left the text white
+   on a light highlight background until this was widened to match. */
+.impact-slide .impact-inner h3.title-highlight {
+  display: inline-block;
+  font-weight: 400;
+  color: #000;
+  background: var(--divider-color, var(--accent-blue));
+  padding: 0.1em 0.25em;
+}
+
 /* Only the course-title slide needs to force one line — other divider
    headings can be longer sentences and should wrap normally. The title
    slide's own highlighter box also cycles through the whole palette
@@ -161,6 +183,18 @@
   letter-spacing: 0.02em;
   padding: 0.12em 0.45em;
   white-space: nowrap;
+}
+
+/* Tools slide (week01 slide 20/movement 5) — same stacked, individually
+   highlighted look as .bio-roles (reuses .bio-role for each item's box),
+   but centered rather than left-aligned since there's no portrait
+   sitting alongside it here. */
+.tools-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  margin-top: 0.8em;
 }
 
 /* Bio slide layout: name on its own line, then a row below it pairing
@@ -250,10 +284,31 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 52px;
+  height: var(--bottom-bar-height);
   background: var(--accent-grey);
   z-index: 5;
   overflow: hidden;
+}
+
+/* Embedded background videos (data-background-iframe slides) render
+   full-slide-height by default via reveal.js's own inline styles on the
+   iframe, which puts their bottom edge directly behind the bottom bar
+   (z-index:5, always on top) — the video isn't actually cropped, it's
+   just visually covered by the bar sitting over it. Shrinking the
+   iframe to leave the bar's height clear fixes every video slide at
+   once, since this targets reveal's own generated markup rather than
+   anything per-slide. !important is required to beat those inline
+   styles reveal sets directly on the iframe element. */
+.reveal .slide-background-content iframe {
+  height: calc(100% - var(--bottom-bar-height)) !important;
+  /* Browsers apply a default border to <iframe> (content-box sizing),
+     which adds on top of the calc() height above rather than being
+     absorbed by it — left in place, that border's bottom half is exactly
+     what still overlapped the bar after the height fix alone (measured:
+     iframe rendered 4px taller than its own computed height, matching a
+     2px top + 2px bottom default border). Stripping the border removes
+     that overflow and the border itself was never wanted visually anyway. */
+  border: 0 !important;
 }
 
 .bottom-bar__fill {
@@ -330,41 +385,54 @@
   height: 82%;
 }
 
-/* 2x2 riso arrangement (see week01's slide 9, populated by main.js) —
-   2 rows, 2 images per row. Real <img> elements, not background-image:
-   uniform grid cells (this used to be display:grid with 1fr tracks,
-   background-size:cover) inherently crop or letterbox anything that
-   isn't the cell's own aspect ratio, and 3 of these 4 riso images are
-   square while one (fullsheetTall.jpg) is notably taller than wide —
-   no single cell shape fits both without cropping or black bars.
-   Fixing each ROW's height (not each cell's width) and letting width
-   auto-derive from each image's own aspect ratio sidesteps that
-   entirely — width can vary freely per image with no downside, so
-   there's nothing forcing a crop. This also structurally rules out the
-   vertical-overflow bug hit twice already on this same slide (stacking
-   items whose combined natural height exceeds the container): height
-   is fixed by design here, not computed from content. */
+/* Riso arrangement (see week01's slide 9, populated by main.js) — not a
+   symmetric 2x2 grid of *cells*, since 3 of the 4 riso images are square
+   and one (fullsheetTall.jpg) is notably taller than wide, and a
+   uniform-cell grid either crops or letterboxes whatever doesn't match
+   the cell shape. fullsheetTall gets its own full-height column; the
+   other 3 sit in an actual 2x2 grid (.riso-quad) beside it, one cell
+   left empty (bottom-right, by DOM order — grid auto-placement fills
+   row-major, so a 4th empty child naturally lands last/bottom-right
+   with no explicit grid-column/row needed). */
 .riso-grid {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
-  height: 84%;
-}
-
-.riso-row {
-  display: flex;
   justify-content: center;
-  align-items: center;
   gap: 0.8rem;
-  height: calc(50% - 0.4rem);
+  height: 90%;
 }
 
-.riso-row img {
+.riso-featured {
   display: block;
   height: 100%;
   width: auto;
   border-radius: 0.4rem;
+}
+
+/* .riso-quad's own width+height are set explicitly by main.js to match
+   .riso-featured's rendered height (a square block) — not each cell
+   individually. CSS Grid's 1fr tracks then divide that square evenly
+   into 4 square cells on their own, no per-cell JS needed: the
+   container has a definite size, so there's none of the ancestor
+   shrink-to-fit ambiguity that aspect-ratio-based per-cell sizing hit
+   elsewhere on this same slide (see main.js's comment on this). */
+.riso-quad {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+/* background-image, not <img> + object-fit — two of these three riso
+   images are animated GIFs, and object-fit:cover has the same known
+   Chromium drift bug on later GIF frames noted elsewhere in this file
+   (.gif-grid, .media-pair, .media-trio all use this same pattern). */
+.riso-quad .riso-quad-cell {
+  border-radius: 0.4rem;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* Rendered as a CSS background-image, not an <img> with object-fit:
@@ -381,6 +449,69 @@
   background-repeat: no-repeat;
 }
 
+/* Daphne Oram quote (week01, movement 3). Same highlighter-box idea as
+   the divider h1/h2 rule above (colored rectangle behind the text), but
+   applied to an inline span inside .impact-statement instead of the
+   whole heading, and with box-decoration-break so a highlighter-style
+   background on wrapped inline text gets its own box per line — a plain
+   background on an inline element only wraps around the first/last
+   line's edges by default, which looks broken once text wraps to more
+   than one line. */
+.quote-mark {
+  display: inline;
+  background: var(--accent-green);
+  color: #000;
+  padding: 0.05em 0.3em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.quote-cite {
+  display: block;
+  margin-top: 0.8em;
+  font-family: var(--r-heading-font);
+  font-size: 0.5em;
+  font-weight: 400;
+  font-style: normal;
+  opacity: 0.7;
+}
+
+/* Generic photo + caption block (Daphne Oram, week01 slide 12; DAW
+   example, slide 23) — a column (image, then caption) with
+   align-items:flex-start — the whole figure gets centered on the slide
+   as one block (via .impact-inner's own centering), but the caption
+   itself left-aligns to the image's own left edge rather than the
+   slide's center, landing under its bottom-left corner. aspect-ratio is
+   set per-instance in JS (see each week's main.js) to match that photo's
+   real dimensions exactly, so background-size:cover never needs to
+   crop — not hardcoded here since different photos have different
+   ratios. */
+.photo-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.photo-image {
+  /* Fixed px, not vw/vh — those are relative to the real browser
+     viewport, not reveal.js's scaled logical canvas, so they don't
+     track the same way % or plain px do (learned the hard way earlier
+     in this project, on the bio portrait sizing). */
+  width: 780px;
+  border-radius: 0.4rem;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.photo-caption {
+  margin-top: 0.6em;
+  font-family: var(--r-heading-font);
+  font-size: 0.55em;
+  font-weight: 400;
+}
+
 /* Three media items side by side, all square-cropped (see week01 slide
    10). aspect-ratio:1 + background-size:cover on each item, not a fixed
    height like .media-pair — that way the row sizes itself from the
@@ -390,7 +521,7 @@
   display: flex;
   justify-content: center;
   gap: 0.8rem;
-  width: 94%;
+  width: 98%;
 }
 
 .media-trio .media-trio-item {

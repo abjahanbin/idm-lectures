@@ -161,35 +161,57 @@ function initDjBoringPair() {
 
 initDjBoringPair();
 
-// --- Slide 9: riso assets, 2x2 grid ---------------------------------------
+// --- Slide 9: riso assets — one full-height featured image + a 2x2 grid
+// of the 3 square ones beside it, bottom-right cell empty (see the
+// .riso-grid / .riso-quad comments in theme.css for why this shape, and
+// why the quad is sized as one square block rather than per-cell).
 
-const RISO_NAMES = [
+const RISO_FEATURED_NAME = 'fullsheetTall.jpg';
+const RISO_QUAD_NAMES = [
   'RENDERWIGGLE-Converted2.gif',
   'Riso_Full01.jpg',
   'coinspinriso.gif',
-  'fullsheetTall.jpg',
 ];
 
 function initRisoGrid() {
-  const grid = document.getElementById('riso-grid');
-  if (!grid) return;
+  const featured = document.getElementById('riso-featured');
+  const quad = document.getElementById('riso-quad');
+  if (!featured || !quad) return;
 
-  const rows = [
-    document.createElement('div'),
-    document.createElement('div'),
-  ];
-  rows.forEach((row) => {
-    row.className = 'riso-row';
-    grid.appendChild(row);
-  });
+  featured.src = new URL(`./assets/riso/${RISO_FEATURED_NAME}`, import.meta.url).href;
 
-  // 2 per row, in RISO_NAMES order.
-  RISO_NAMES.forEach((name, i) => {
-    const img = document.createElement('img');
-    img.alt = '';
-    img.src = new URL(`./assets/riso/${name}`, import.meta.url).href;
-    rows[Math.floor(i / 2)].appendChild(img);
+  RISO_QUAD_NAMES.forEach((name) => {
+    const cell = document.createElement('div');
+    cell.className = 'riso-quad-cell';
+    cell.style.backgroundImage = `url("${new URL(`./assets/riso/${name}`, import.meta.url).href}")`;
+    quad.appendChild(cell);
   });
+  // 4th cell left empty — grid auto-placement fills row-major, so an
+  // empty div appended last lands bottom-right with no explicit
+  // grid-column/row needed.
+  quad.appendChild(document.createElement('div'));
+
+  function sizeQuad() {
+    const totalHeight = featured.offsetHeight;
+    if (!totalHeight) return;
+    // 0.92 — same deliberate safety margin used for this slide's earlier
+    // stacked-column layout (see git history/prior comment here): the
+    // exact math checked out on inspection but still rendered a few px
+    // taller than the featured image, most likely rounding between
+    // offsetHeight (an integer) and the browser's fractional layout
+    // height. Erring safely small avoids overflow without chasing the
+    // exact source further.
+    const size = totalHeight * 0.92;
+    quad.style.width = `${size}px`;
+    quad.style.height = `${size}px`;
+  }
+
+  // No document.fonts.ready gate — .riso-featured's height comes from a
+  // plain CSS percentage, not text metrics, so it's correct as soon as
+  // layout runs (see the bio portrait fix for the case where that gate
+  // does matter).
+  sizeQuad();
+  window.addEventListener('resize', sizeQuad);
 }
 
 initRisoGrid();
@@ -215,3 +237,33 @@ function initDrawingMachineTrio() {
 }
 
 initDrawingMachineTrio();
+
+// --- Slide 12: Daphne Oram photo --------------------------------------
+
+function initOramPhoto() {
+  const imageEl = document.getElementById('oram-image');
+  if (!imageEl) return;
+
+  // aspect-ratio matches the source file's real 16:9 exactly, so
+  // background-size:cover never needs to crop. Set here (not in CSS)
+  // since .photo-image is shared across photos with different ratios —
+  // see initDawPhoto below.
+  imageEl.style.aspectRatio = '16 / 9';
+  imageEl.style.backgroundImage = `url("${new URL('./assets/oramics/DaphneOram.jpg', import.meta.url).href}")`;
+}
+
+initOramPhoto();
+
+// --- Slide 14: DAW example ------------------------------------------------
+
+function initDawPhoto() {
+  const imageEl = document.getElementById('daw-image');
+  if (!imageEl) return;
+
+  // Source file is 960x681 — matches its real ratio exactly, same reason
+  // as initOramPhoto above.
+  imageEl.style.aspectRatio = '960 / 681';
+  imageEl.style.backgroundImage = `url("${new URL('./assets/daw/dawexample.jpg', import.meta.url).href}")`;
+}
+
+initDawPhoto();
