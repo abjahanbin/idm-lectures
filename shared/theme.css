@@ -3,14 +3,343 @@
  * Edit here to restyle every week's lecture at once.
  */
 
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
 :root {
-  --r-heading-font: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --r-main-font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-heading-font: 'Space Grotesk', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-main-font: 'Space Grotesk', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-link-color: #57c4fa;
+
+  /* Lighter, non-shouty default for every heading in the deck (theme
+     default is 600/uppercase) — the "clean" look applies everywhere,
+     not just the title slide. */
+  --r-heading-font-weight: 500;
+  --r-heading-text-transform: none;
+
+  /* Accent palette. --accent-pink was a one-digit typo away from
+     --accent-teal in the original spec (#f6b5d3 vs #56b5d3) — both are
+     now kept as distinct colors. --accent-grey stays for neutral UI
+     chrome (bottom bar, placeholder borders) but is deliberately left
+     out of the highlight-cycle animation and the Voronoi background. */
+  --accent-yellow: #fff269;
+  --accent-blue: #57c4fa;
+  --accent-green: #00e58e;
+  --accent-teal: #56b5d3;
+  --accent-pink: #f6b5d3;
+  --accent-grey: #e7e7e7;
 }
 
-.reveal .slides section .week-kicker {
+/* Utility classes for coloring text/highlights while writing slide content. */
+.text-yellow { color: var(--accent-yellow); }
+.text-blue   { color: var(--accent-blue); }
+.text-green  { color: var(--accent-green); }
+.text-teal   { color: var(--accent-teal); }
+.text-pink   { color: var(--accent-pink); }
+
+.bg-yellow { background: var(--accent-yellow); color: #1a1a1a; }
+.bg-blue   { background: var(--accent-blue); color: #1a1a1a; }
+.bg-green  { background: var(--accent-green); color: #1a1a1a; }
+.bg-teal   { background: var(--accent-teal); color: #1a1a1a; }
+.bg-pink   { background: var(--accent-pink); color: #1a1a1a; }
+
+/* ------------------------------------------------------------------ *
+ * Impact slides — the title slide, movement dividers, and text-only
+ * "hold on screen" discussion slides. All three need the same thing:
+ * everything centered dead in the middle of the slide.
+ *
+ * reveal.js manages the active <section>'s own inline styles directly
+ * (position/display) for slide transitions, which fights any CSS put
+ * on the section itself — hence the !important block below. The actual
+ * centering lives on an inner wrapper div reveal never touches.
+ * ------------------------------------------------------------------ */
+.reveal .slides section.impact-slide {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+.reveal .slides section.impact-slide .impact-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Big centered statement — the text-only slides meant to hang on screen
+   during discussion (provocation/synthesis/final question). No bullets,
+   no resolution. */
+.impact-slide .impact-statement {
+  font-size: 1.5em;
+  max-width: 24em;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+/* Small "credit line" under a divider title — e.g. the instructor byline
+   on the title slide. Deliberately much smaller than the title itself. */
+.impact-slide .impact-byline {
+  font-size: 0.5em;
+  opacity: 0.7;
+  font-weight: 400;
+  margin-top: 0.6em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Movement dividers (and the title slide, which is movement 1's divider):
+   the heading sits on a highlighter-style color rectangle. Color comes
+   from --divider-color, set inline per slide so it can follow the
+   movement-color cycle used by the bottom bar (see reveal-init.js). */
+.impact-slide.divider .impact-inner h1,
+.impact-slide.divider .impact-inner h2 {
+  display: inline-block;
+  font-size: 1.3em;
+  font-weight: 400;
+  color: #000;
+  background: var(--divider-color, var(--accent-blue));
+  padding: 0.1em 0.25em;
+}
+
+/* Only the course-title slide needs to force one line — other divider
+   headings can be longer sentences and should wrap normally. The title
+   slide's own highlighter box also cycles through the whole palette
+   instead of sitting on one static movement color — it's the one
+   divider that isn't tied to the bar's movement-color wayfinding (see
+   reveal-init.js, which deliberately omits data-movement-name on it). */
+.impact-slide.divider .impact-inner h1 {
+  white-space: nowrap;
+  animation: highlight-cycle 15s linear infinite;
+}
+
+/* step-end on each stop (rather than one steps() on the animation
+   shorthand) holds each color for its full 20%-duration segment and
+   jumps instantly to the next at the boundary — a clean snap between
+   colors, not a crossfade. */
+@keyframes highlight-cycle {
+  0%   { background: var(--accent-yellow); animation-timing-function: step-end; }
+  20%  { background: var(--accent-blue); animation-timing-function: step-end; }
+  40%  { background: var(--accent-green); animation-timing-function: step-end; }
+  60%  { background: var(--accent-teal); animation-timing-function: step-end; }
+  80%  { background: var(--accent-pink); animation-timing-function: step-end; }
+  100% { background: var(--accent-yellow); }
+}
+
+/* Bio slide (week01 slide 2) — name + a stack of role tags, each in its
+   own highlighter color. Reuses the .bg-* utilities above rather than
+   inventing new color rules. */
+.bio-name {
+  font-weight: 400;
+}
+
+.bio-roles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  margin-top: 0.9em;
+}
+
+.bio-role {
+  display: inline-block;
+  font-family: var(--r-heading-font);
+  font-size: 1.4em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  padding: 0.12em 0.45em;
+}
+
+.reveal .slides section .week-kicker,
+.reveal .slides section .movement-kicker {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-size: 0.5em;
-  opacity: 0.6;
+  color: var(--divider-color, var(--accent-yellow));
+  opacity: 0.85;
+  display: block;
+  margin-bottom: 0.5em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* ------------------------------------------------------------------ *
+ * Animated Voronoi background (see shared/voronoi-bg.js) — shown only
+ * behind divider slides, toggled by reveal-init.js.
+ *
+ * Plain opacity, pushed high (not mix-blend-mode:screen) — screen blend
+ * can only brighten a channel a color already has, so anything with a
+ * zero channel (green #00e58e has no red, etc.) stays comparatively
+ * dull no matter the opacity. Plain opacity at a high value just shows
+ * the true palette color close to unmodified, which reads brighter and
+ * more consistent across all 5 colors. Divider text sits in its own
+ * highlight box or has a text-shadow, so legibility isn't at risk.
+ * ------------------------------------------------------------------ */
+.divider-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.divider-bg.is-visible {
+  opacity: 0.88;
+}
+
+/* ------------------------------------------------------------------ *
+ * Bottom status bar — persistent across every slide. Shows where you
+ * are in the deck (slide count + current movement) and a progress fill
+ * colored by the current movement, cycling through the accent palette.
+ * Injected by shared/reveal-init.js so no markup repeats per week.
+ * ------------------------------------------------------------------ */
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 52px;
+  background: var(--accent-grey);
+  z-index: 5;
+  overflow: hidden;
+}
+
+.bottom-bar__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  background: var(--accent-blue);
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+.bottom-bar__label {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.1rem;
+  font-family: 'Space Grotesk', system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 300;
+  color: #1a1a1a;
+  pointer-events: none;
+}
+
+.bottom-bar__movement {
+  opacity: 0.75;
+}
+
+/* reveal.js's own nav arrows default to bottom-right, which now sits
+   right on top of the (taller) bottom bar. Move the whole cluster to
+   the top-right instead.
+   reveal.js only ships a 'bottom-right' | 'edges' controlsLayout option
+   — no built-in top-right — and each arrow button is individually
+   positioned with its own `bottom: Xem` offset from the .controls box,
+   assuming that box sits near the viewport's bottom edge. Flipping just
+   the container to `top` (without this) pushes every arrow further
+   *up*, off the top of the screen — confirmed by inspecting the actual
+   rendered DOM, not guessed. Each arrow needs `bottom` swapped for an
+   equivalent `top`, and up/down's values swapped with each other, so
+   the up arrow stays visually above the down arrow either way. */
+.reveal .controls {
+  top: var(--r-controls-spacing);
+  bottom: auto;
+}
+
+.reveal .controls .navigate-left,
+.reveal .controls .navigate-right {
+  top: 1.4em !important;
+  bottom: auto !important;
+}
+
+.reveal .controls .navigate-up {
+  top: 0.5em !important;
+  bottom: auto !important;
+}
+
+.reveal .controls .navigate-down {
+  top: 5em !important;
+  bottom: auto !important;
+}
+
+/* 3x2 rotating GIF grid (see week01's slide 3, populated by main.js). */
+.gif-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.7rem;
+  width: 92%;
+  height: 82%;
+}
+
+/* Rendered as a CSS background-image, not an <img> with object-fit:
+   Chromium has a known issue where object-fit:cover positions an
+   animated GIF's first frame correctly but drifts once later frames
+   (often encoded as partial deltas, not full frames) start painting —
+   background-size:cover doesn't share that bug. */
+.gif-grid .gif-cell {
+  overflow: hidden;
+  border-radius: 0.4rem;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Two media items side by side, full height (see week01 slide 6). Same
+   background-image technique as .gif-cell, for the same reason. */
+.media-pair {
+  display: flex;
+  gap: 0.9rem;
+  width: 92%;
+  height: 82%;
+}
+
+.media-pair .media-pair-item {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* The image (not the gif) gets a wider box, but stays background-size:
+   cover (like .media-pair-item's default) — contain was letterboxing it
+   with visible black bars and leaving it shorter than the gif's box. */
+#reframe-image {
+  flex: 1.7;
+}
+
+/* Dashed placeholder box standing in for an image/video that will be
+   dropped in later. Give it a data-label to identify what belongs there. */
+.media-placeholder {
+  margin: 1.25rem auto 0;
+  max-width: 70%;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--accent-grey);
+  border-radius: 0.5rem;
+  color: var(--accent-grey);
+  font-size: 0.5em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* Blank/open catch-all branch slides — just a prompt for whatever the room says. */
+.reveal .slides section.open-slide h3 {
+  opacity: 0.5;
+  font-weight: 400;
 }
