@@ -512,6 +512,45 @@
   font-weight: 400;
 }
 
+/* Full-viewport content screenshots (week02). The deck's slide canvas is a
+   fixed 960x700 (~1.37:1) that reveal.js scales as one unit to fit the
+   window — a 16:9 image can't show at its full, unstretched, uncropped
+   proportions *within* that canvas, since 16:9 is wider than the canvas
+   itself (no combination of cover/contain avoids both cropping and
+   letterboxing there). So this bypasses the canvas entirely: same trick
+   reveal-init.js already uses for the bottom bar and WebGL divider
+   backgrounds — an element appended straight to <body>, outside the
+   .reveal container reveal.js applies its scale transform to, sized with
+   position:fixed to the real browser viewport rather than the logical
+   960x700 units. On an actual 16:9 display this shows the complete image
+   with zero cropping and zero letterboxing; only a non-16:9 window would
+   ever show a sliver of letterbox (background-size:contain guarantees no
+   cropping regardless). Toggled visible only while the current slide is a
+   screenshot slide — see initScreenshots() in week02/main.js.
+
+   height stops short of the real viewport bottom by --bottom-bar-height,
+   same reason as the video-iframe crop fix above: without it the bar sat
+   on top of (and visually cut off) the bottom of the image instead of
+   sitting in space reserved for it. */
+#screenshot-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100vh - var(--bottom-bar-height));
+  z-index: 4;
+  background-color: #000;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#screenshot-layer.is-visible {
+  opacity: 1;
+}
+
 /* Three media items side by side, all square-cropped (see week01 slide
    10). aspect-ratio:1 + background-size:cover on each item, not a fixed
    height like .media-pair — that way the row sizes itself from the
