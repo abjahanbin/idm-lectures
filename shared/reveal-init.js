@@ -7,6 +7,7 @@ import './theme.css';
 import { createVoronoiBackground } from './voronoi-bg.js';
 import { createPerlinNoiseBackground } from './perlin-noise-bg.js';
 import { createTruchetBackground } from './truchet-bg.js';
+import { createRule30Background } from './rule30-bg.js';
 
 // Bottom bar's progress-fill color, cycled by movement number (1-indexed).
 // Deliberately just the 4 accent colors — grey would read as "no
@@ -68,6 +69,7 @@ export function initReveal(config = {}) {
     voronoi: createVoronoiBackground(BG_COLORS),
     'perlin-noise': createPerlinNoiseBackground(BG_COLORS),
     truchet: createTruchetBackground(BG_COLORS),
+    rule30: createRule30Background(BG_COLORS),
   };
   Object.values(backgrounds).forEach((bg) => document.body.appendChild(bg.canvas));
 

@@ -8,14 +8,196 @@
 <body>
   <div class="reveal">
     <div class="slides">
-      <section>
-        <span class="week-kicker">Week 02</span>
-        <h1>Lecture Title</h1>
+
+      <!-- ============================================================ -->
+      <!-- MOVEMENT 1 — (title)                                          -->
+      <!-- ============================================================ -->
+
+      <!-- 1. Title slide (movement 1's divider). No data-movement-name
+           here on purpose, same as week01 — the bar's movement label
+           only starts showing from slide 2 onward. data-bg swaps the
+           default voronoi texture for the Rule 30 cellular-automaton
+           background, on theme for this week's emergence topic. -->
+      <section class="impact-slide divider" data-movement="1" data-bg="rule30">
+        <div class="impact-inner">
+          <h1>Interactive Digital Media</h1>
+          <p class="impact-byline">Week 02</p>
+        </div>
       </section>
-      <section>
-        <h2>Slide 2</h2>
-        <p>Content goes here.</p>
+
+      <!-- 2. Embedded video, full-bleed background iframe, autoplay with
+           audio (no mute param) — same pattern as week01's video slides. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/V4f_1_r80RY?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 3. "Emergence" — the core term, highlighted the same way as
+           week01's Project 1/2/3 headings (plain impact-slide, no
+           WebGL divider background). Definition sits on a breakout
+           slide below it, hung on screen the same way as the
+           discussion/provocation impact-statement slides. -->
+      <section data-movement="1" data-movement-name="Introduction">
+        <section class="impact-slide" style="--divider-color: var(--accent-green);">
+          <div class="impact-inner">
+            <h3 class="title-highlight">Emergence</h3>
+          </div>
+        </section>
+
+        <!-- 3a. Definition breakout. &nbsp; at the two spots prone to
+             stranding a word on its own line — same fix as week01 slide
+             29's orphaned "to?" — rather than a forced <br>, which just
+             traded that problem for an awkwardly short standalone line. -->
+        <section class="impact-slide">
+          <div class="impact-inner">
+            <p class="impact-statement">Individual agents follow simple local&nbsp;rules, and a coherent global pattern appears that none of the individual agents&nbsp;see.</p>
+          </div>
+        </section>
       </section>
+
+      <!-- 5. Embedded video, full-bleed background iframe, autoplay with
+           audio (no mute param) — same pattern as slide 2. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/tEjwc_Xprxg?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 6. Embedded video, full-bleed background iframe, autoplay with
+           audio (no mute param) — same pattern as slides 2 and 5. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/6WCQ1Q6Xoek?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 7. Embedded video, full-bleed background iframe, autoplay with
+           audio (no mute param) — same pattern as the preceding videos. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/kq0fws6nEfk?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 8. Embedded video, full-bleed background iframe, autoplay with
+           audio (no mute param) — same pattern as the preceding videos. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/75k8sqh5tfQ?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 9. Embedded video, full-bleed background iframe, autoplay with
+           audio (no mute param) — same pattern as the preceding videos. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/86iQiV3-3IA?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 10. Embedded video, full-bleed background iframe, autoplay with
+           audio (no mute param) — same pattern as the preceding videos. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/FRgidMODDaI?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 11. Boids algorithm diagram. Same photo-figure/photo-caption
+           pattern as week01's Oram/DAW photo slides — image set in
+           main.js via new URL(..., import.meta.url) with its real
+           aspect ratio, not hardcoded in CSS. -->
+      <section class="impact-slide" data-movement="1" data-movement-name="Introduction">
+        <div class="impact-inner">
+          <div class="photo-figure">
+            <div class="photo-image" id="boids-image"></div>
+            <p class="photo-caption">Boids Algorithm</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12. Embedded video, full-bleed background iframe, autoplay with
+           audio (no mute param) — same pattern as the preceding videos. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/A8Xt3DlrwhY?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 13. Embedded video, full-bleed background iframe, autoplay with
+           audio, starting at 1:16 (76s). Radio/list params from the
+           source URL dropped — just the video ID + start, same as the
+           other YouTube embeds. Moved here (was slide 17) per request. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/2ixGWdzTah4?autoplay=1&start=76&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 14. Blank — video removed on request, kept as an empty slot
+           rather than closing the gap. -->
+      <section data-movement="1" data-movement-name="Introduction"></section>
+
+      <!-- 15. Embedded video, full-bleed background iframe, autoplay with
+           audio, starting at 1:14 (74s), no loop. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/PtPK_xx5Hks?autoplay=1&start=74&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 16. Karl Sims' reaction-diffusion demo. Generic (non-YouTube)
+           page, same data-background-iframe pattern as the syllabus embed
+           — interactive so it can actually be used during class, not
+           just displayed. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.karlsims.com/rd.html"
+        data-background-interactive
+      ></section>
+
+      <!-- 17. Sage Jenson's "36 points" — generic (non-YouTube) page,
+           same data-background-iframe pattern as slide 16. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.sagejenson.com/36points/"
+        data-background-interactive
+      ></section>
+
+      <!-- 18. Embedded video, full-bleed background iframe, autoplay with
+           audio — same pattern as the preceding videos. Radio/list params
+           from the source URL dropped, just the video ID. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/ruNVYF3Befc?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 19. Embedded video, full-bleed background iframe, autoplay with
+           audio — same pattern as the preceding videos. -->
+      <section
+        data-movement="1"
+        data-movement-name="Introduction"
+        data-background-iframe="https://www.youtube.com/embed/4hLtjlaVzsk?autoplay=1&rel=0"
+        data-background-interactive
+      ></section>
+
+      <!-- 20. Blank slide. -->
+      <section data-movement="1" data-movement-name="Introduction"></section>
     </div>
   </div>
   <script type="module" src="./main.js"></script>
