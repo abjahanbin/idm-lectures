@@ -84,6 +84,20 @@
   font-weight: 500;
 }
 
+/* Opt-in modifier for a longer statement than the default size/width
+   comfortably reads at — the week01/week02 impact-statements (a short
+   quote, a one-sentence definition) are fine at 1.5em/24em, but a longer
+   paragraph there wraps into too many short lines to read at a glance.
+   max-width here is a %, not em — max-width:24em above is relative to
+   .impact-statement's OWN font-size, so shrinking that font-size alone
+   would shrink the wrap width by the same factor and leave words-per-line
+   unchanged; decoupling it from font-size is what actually fits more
+   words on each line rather than just rendering everything smaller. */
+.impact-slide .impact-statement.text-compact {
+  font-size: 1.1em;
+  max-width: 90%;
+}
+
 /* Small "credit line" under a divider title — e.g. the instructor byline
    on the title slide. Deliberately much smaller than the title itself. */
 .impact-slide .impact-byline {
@@ -195,6 +209,26 @@
   align-items: center;
   gap: 0.4em;
   margin-top: 0.8em;
+}
+
+/* Opt-in modifier for a longer list than one column comfortably fits —
+   week01's original 4-item Tools slide is fine as a single column, but
+   week04's 8-item Parameters list ran off the bottom of the slide at
+   that height. Grid, not flex-wrap, so the two columns land evenly
+   (4 rows each) instead of wherever wrapping happens to break. */
+.tools-stack.two-column {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  column-gap: 0.8em;
+  row-gap: 0.4em;
+  justify-content: center;
+}
+
+/* .bio-role's own 1.4em was sized for single short words (week01's
+   Tools slide) — two columns of that size ran the longest item
+   ("ScaleTransitionSpeed") past the slide's edge. */
+.tools-stack.two-column .bio-role {
+  font-size: 0.9em;
 }
 
 /* Bio slide layout: name on its own line, then a row below it pairing
@@ -548,6 +582,55 @@
 }
 
 #screenshot-layer.is-visible {
+  opacity: 1;
+}
+
+/* Full-viewport local video clips (week04) — same #screenshot-layer
+   pattern and the same reasoning (a fixed <body>-level element sized to
+   the real viewport, outside reveal's scaled canvas, so a ~16:9 clip
+   shows at its own proportions instead of being bound by the deck's
+   960x700 shape). object-fit:contain is the <video>/<img> equivalent of
+   background-size:contain — no cropping, no stretching. muted/loop are
+   set as element properties in JS (autoplay policies are unreliable via
+   attributes alone), not here. */
+#clip-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100vh - var(--bottom-bar-height));
+  width: 100%;
+  z-index: 4;
+  background-color: #000;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#clip-layer.is-visible {
+  opacity: 1;
+}
+
+/* Student-name tag for the clip slides — same fixed, real-pixel,
+   outside-the-canvas approach as #clip-layer itself (top-left corner
+   never overlaps the bottom bar, so no calc() clearance needed here). */
+#clip-caption {
+  position: fixed;
+  top: 1.2rem;
+  left: 1.2rem;
+  z-index: 5;
+  background: var(--accent-blue);
+  color: #1a1a1a;
+  font-family: var(--r-heading-font);
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 0.3em 0.7em;
+  border-radius: 0.3rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#clip-caption.is-visible {
   opacity: 1;
 }
 

@@ -72,11 +72,14 @@
   <div class="weeks" id="weeks"></div>
   <script>
     const grid = document.getElementById('weeks');
-    const RELEASED_THROUGH = 2; // bump as each week's slides go up
+    // Explicit list, not a threshold — lets a later week go live while an
+    // earlier one is still an empty placeholder (e.g. week 3 isn't built
+    // yet but week 4 is).
+    const RELEASED = [1, 2, 4];
 
     for (let i = 1; i <= 15; i++) {
       const w = String(i).padStart(2, '0');
-      const released = i <= RELEASED_THROUGH;
+      const released = RELEASED.includes(i);
       const el = document.createElement(released ? 'a' : 'span');
       if (released) el.href = `./week${w}/`;
       el.textContent = w;
