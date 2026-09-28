@@ -28,6 +28,13 @@
   --accent-pink: #f6b5d3;
   --accent-grey: #e7e7e7;
 
+  /* Not part of the original 5-color palette above — added for the
+     audio-demo play/stop button (week06), which needs a green/red pair
+     for a play-vs-stop state read that none of the existing accents
+     cover. Matches the other accents' saturation/brightness rather than
+     a generic CSS red. */
+  --accent-red: #ff5c5c;
+
   /* Shared with .bottom-bar's own height and the background-iframe
      clearance fix below, so they can't drift out of sync. */
   --bottom-bar-height: 52px;
@@ -632,6 +639,440 @@
 
 #clip-caption.is-visible {
   opacity: 1;
+}
+
+/* Audio synthesis demo (week06) — a play/stop button plus a live
+   waveform visualizer drawn from an AnalyserNode (see
+   shared/audio-demo.js). Barebones for now — later slides add more
+   controls (amplitude, other waveform shapes, etc.) by reusing this
+   same block, not by extending it. */
+.audio-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2em;
+  margin-top: 1em;
+  width: 70%;
+  max-width: 640px;
+}
+
+.wave-canvas {
+  width: 100%;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 0.6rem;
+}
+
+/* Canvas + vertical volume fader side by side (week06 slide 6) — a
+   mixing-console channel-strip layout, wave display on the left, gain
+   control right next to it. Only used when .wave-canvas is nested in
+   .wave-row; the plain width:100% rule above still applies everywhere
+   else (slides that are just a canvas with no fader). */
+.wave-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.8em;
+  width: 100%;
+}
+
+.wave-row .wave-canvas {
+  width: auto;
+  flex: 1;
+  /* A flex item's default min-width is auto, which for a <canvas>
+     resolves to its intrinsic 300px content size — harmless with one
+     canvas in the row, but with two (slide 8) that's 600px of minimum
+     canvas width alone, overflowing .audio-demo's own 640px cap and
+     pushing the volume fader off the edge of the slide entirely. */
+  min-width: 0;
+}
+
+/* Spectrum (bar) view (week06 slide 8) — sits next to the scope, same
+   box treatment, splitting the row's middle space evenly with it. Bars
+   are drawn in JS (see drawSpectrumFrame in shared/audio-demo.js), one
+   per harmonic of the current fundamental, in the same divider-color as
+   the scope trace — both are just two views of the one signal, not
+   separate controls, so they share a color rather than needing their
+   own the way the interactive sliders/buttons do. */
+.spectrum-canvas {
+  flex: 1;
+  min-width: 0; /* see the matching comment on .wave-row .wave-canvas above */
+  height: 180px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 0.6rem;
+}
+
+/* Waveform-select buttons (week06 slide 7) — stacked on the left of
+   .wave-row, icon-only. Unselected buttons sit dim/neutral; the selected
+   one gets a dedicated highlight color (yellow) distinct from every
+   other color already in play on this slide (blue divider/frequency
+   slider, green/red play-stop, pink volume fader) so it reads as its
+   own, separate kind of control at a glance. */
+.waveform-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.waveform-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4em;
+  height: 2.4em;
+  padding: 0;
+  border: none;
+  border-radius: 0.4rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.waveform-button svg {
+  width: 1.3em;
+  height: 1.3em;
+}
+
+.waveform-button:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.waveform-button.is-selected {
+  background: var(--accent-yellow);
+  color: #1a1a1a;
+}
+
+/* Target-select buttons (week06 LFO slide) — reuse .waveform-button's
+   box/selection styling directly (same "pick one of a few options"
+   control), but show a short text label instead of a shape icon, since
+   there's no icon that reads as "pitch"/"amplitude"/"filter cutoff" the
+   way a waveform trace does for a shape. The font-size lives on the
+   inner label span, not .target-button itself — .waveform-button's own
+   width/height are set in em, which resolve against an element's OWN
+   font-size, so putting a smaller font-size directly on the button
+   would shrink its box along with the text (confirmed by screenshot:
+   the button visibly shrank before this was split into a span). */
+.target-button-label {
+  font-family: var(--r-heading-font);
+  font-weight: 500;
+  font-size: 0.4em;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+/* Vertical volume fader — a fully-custom horizontal range input,
+   rotated, rather than the non-standard -webkit-appearance:slider-
+   vertical mode this used at first: that mode kept showing partial
+   native OS chrome through the custom track/thumb styling (read as
+   "white and generic", didn't match the frequency slider) and its
+   behavior is inconsistent across browsers. The .volume-control wrapper
+   holds the vertical footprint in layout since a CSS transform doesn't
+   change the box the browser reserves for it.
+   Styling is written out in full here rather than shared with
+   .freq-slider via a common class — a shared-class version of this
+   rendered with no visible thumb on *either* slider (root cause not
+   fully pinned down; duplicating the already-proven-working declarations
+   sidesteps it rather than risk it in front of a class). */
+.volume-control {
+  position: relative;
+  width: 28px;
+  height: 180px;
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+  /* rotate(-90deg), not 90deg — this is what maps the slider's own
+     max/right end to point up rather than down, so dragging toward the
+     top raises the value (a physical fader's "up = louder"). */
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.1em;
+  height: 1.1em;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  /* Deliberately not --divider-color/accent-blue — that's already the
+     frequency slider's color (and this slide's own divider/visualizer
+     color), so a distinct color keeps the two controls visually
+     separate at a glance rather than reading as one slider. */
+  background: var(--accent-pink);
+}
+
+.volume-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 1.1em;
+  height: 1.1em;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--accent-pink);
+}
+
+/* Harmonics/shape morph slider (week06 slide 9) — sits on the left of
+   .wave-row where the waveform-select buttons used to be, same rotated-
+   custom-slider construction as .volume-slider (see the comment there
+   for why it's written out in full rather than shared via a class).
+   Yellow, matching the buttons it replaces — same underlying "which
+   waveform shape" control, just continuous instead of discrete now. */
+.harmonics-control {
+  position: relative;
+  width: 28px;
+  height: 180px;
+}
+
+.harmonics-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.harmonics-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.1em;
+  height: 1.1em;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--accent-yellow);
+}
+
+.harmonics-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.harmonics-slider::-moz-range-thumb {
+  width: 1.1em;
+  height: 1.1em;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--accent-yellow);
+}
+
+/* XY touchpad (week06 Filter slide) — X axis sets the lowpass filter's
+   cutoff frequency (log scale, same feel as the other frequency
+   sliders), Y axis sets its resonance (Q), with "up = more" matching
+   the vertical volume fader's own convention. One drag sweeps both
+   parameters at once, which is a lot more direct/playable to feel than
+   two separate sliders would be. Teal, since every other slider/button
+   color on this deck's other audio slides is already spoken for
+   (blue = frequency/divider, pink = volume, yellow = waveform/
+   harmonics, green/red = play/stop). Sized smaller than the volume/
+   harmonics faders' 180px footprint specifically so the visualizer
+   canvas next to it (flex:1 in .wave-row) gets more of the row's width
+   — this is the only control on the slide, so it doesn't need to be as
+   large as controls that share the row with icon buttons too. */
+.filter-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+/* Light grid, not just a flat panel — gives the eye reference lines to
+   judge drag distance/position against, the way a real XY pad or
+   graphing surface would. */
+.xy-pad {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.06);
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 25% 25%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.6rem;
+  /* Crosshair, not the default pointer/hand — a small, precise mark is
+     what a drag-to-position control like this wants, not a "clickable
+     link" affordance. */
+  cursor: crosshair;
+  touch-action: none; /* prevents the drag from also trying to scroll/pan */
+}
+
+.xy-pad-handle {
+  position: absolute;
+  width: 0.85em;
+  height: 0.85em;
+  border-radius: 50%;
+  background: var(--accent-teal);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Single combined readout below the pad (see initFilterDemo in
+   shared/audio-demo.js), not one label per axis — two axis-mounted
+   labels (one of them rotated) read as busy for what's a secondary
+   readout, and having the pad sit in a row next to a label whose text
+   width changes with each digit visibly nudged the pad sideways as the
+   number changed. One line below the pad avoids that particular shift
+   (its width can't move a pad drawn *above* it), but the readout's own
+   total width still changes the width of .filter-control as a whole —
+   which isn't a fixed-width flex item, so a wider/narrower readout
+   still grew or shrank the space canvas.wave-canvas (flex:1) got in
+   the row next to it. Fixing that for real needs the numbers
+   themselves to occupy a reserved width — see .xy-readout-hz/-q below —
+   not just moving the readout under the pad. */
+.xy-readout {
+  font-family: var(--r-heading-font);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.6em;
+  opacity: 0.65;
+  white-space: nowrap;
+}
+
+/* Reserved wide enough for the largest value each can ever show
+   (10000 Hz is 5 digits; Q's toFixed(1) tops out at "20.0", 4 chars) —
+   right-aligned so an extra digit grows into the reserved space rather
+   than shifting anything else in the line, and the line's own total
+   width never changes as the values change while dragging. */
+.xy-readout-hz,
+.xy-readout-q {
+  display: inline-block;
+  text-align: right;
+}
+
+.xy-readout-hz {
+  width: 5ch;
+}
+
+.xy-readout-q {
+  width: 4ch;
+}
+
+/* Envelope demo canvas (week06 Envelope slide) — same box as the other
+   scope canvases, but drawn as a computed ADSR curve + draggable
+   handles rather than a live AnalyserNode trace (see initEnvelopeDemo
+   in shared/audio-demo.js: the shape it teaches unfolds over a couple
+   of seconds, far longer than the oscilloscope's ~90ms instantaneous
+   window elsewhere in this deck). Crosshair cursor and touch-action:none
+   for the same drag-precision reasons as .xy-pad. */
+.envelope-canvas {
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* Icon-only, circular — a triangle while idle (click to play), swapped
+   for a square while playing (click to stop), same shape language as a
+   physical transport control. Green/red for play/stop rather than the
+   deck's usual highlight color, since that pairing is what the icons
+   themselves are already implying — see --accent-red in :root above. */
+.play-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.2em;
+  height: 3.2em;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent-green);
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.play-button svg {
+  width: 1.3em;
+  height: 1.3em;
+}
+
+.play-button:hover {
+  transform: translateY(-2px);
+}
+
+.play-button.is-playing {
+  background: var(--accent-red);
+}
+
+/* Frequency slider row (week06) — sits between the visualizer and the
+   play button. The slider's own min/max/value are plain integers (see
+   initFrequencyDemo in shared/audio-demo.js); the logarithmic feel comes
+   entirely from how that value maps to Hz in JS, not from anything here. */
+.freq-control {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  width: 100%;
+}
+
+.freq-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+}
+
+.freq-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.1em;
+  height: 1.1em;
+  border-radius: 50%;
+  background: var(--divider-color, var(--accent-blue));
+  border: none;
+  cursor: pointer;
+}
+
+.freq-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.freq-slider::-moz-range-thumb {
+  width: 1.1em;
+  height: 1.1em;
+  border-radius: 50%;
+  background: var(--divider-color, var(--accent-blue));
+  border: none;
+  cursor: pointer;
+}
+
+.freq-value {
+  font-family: var(--r-heading-font);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  min-width: 5.5em;
+  text-align: right;
 }
 
 /* Three media items side by side, all square-cropped (see week01 slide
