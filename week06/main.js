@@ -25,7 +25,7 @@ document.body.appendChild(clipCaption);
 const clipUrls = new Map();
 document.querySelectorAll('section[data-clip-file]').forEach((section) => {
   const file = section.dataset.clipFile;
-  const url = new URL(`./assets/studentwork/${file}`, import.meta.url).href;
+  const url = new URL(`./assets/StudentWork/${file}`, import.meta.url).href;
   clipUrls.set(section, url);
 });
 
@@ -197,7 +197,7 @@ document.body.appendChild(screenshotLayer);
 const screenshotUrls = new Map();
 document.querySelectorAll('section[data-screenshot-file]').forEach((section) => {
   const file = section.dataset.screenshotFile;
-  const url = new URL(`./assets/screenshots/${file}`, import.meta.url).href;
+  const url = new URL(`./assets/Screenshots/${file}`, import.meta.url).href;
   screenshotUrls.set(section, url);
 });
 
