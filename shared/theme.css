@@ -1162,3 +1162,72 @@
   opacity: 0.5;
   font-weight: 400;
 }
+
+/* ------------------------------------------------------------------ *
+ * Week 10 additions — all opt-in, prefixed generically so any later
+ * week can reuse them without change.
+ * ------------------------------------------------------------------ */
+
+/* Three side-by-side columns (week10's memory-translation slides) —
+   each column is a short heading (same highlighter-box look as
+   .title-highlight, following --divider-color) plus a couple of lines
+   underneath. A column can also be heading-only (no <p> children). */
+.three-col-layout {
+  display: flex;
+  justify-content: center;
+  gap: 2.4rem;
+  width: 94%;
+  margin-top: 0.6em;
+}
+
+.three-col-item {
+  flex: 1;
+  max-width: 260px;
+}
+
+.three-col-heading {
+  display: inline-block;
+  font-weight: 400;
+  color: #000;
+  background: var(--divider-color, var(--accent-blue));
+  padding: 0.1em 0.4em;
+  margin: 0 0 0.5em;
+}
+
+.three-col-item p {
+  font-size: 0.55em;
+  margin: 0.3em 0;
+  opacity: 0.9;
+}
+
+/* Opt-in modifier for .tools-stack when items are full phrases rather
+   than short single words — .bio-role's own nowrap + 1.4em sizing
+   (built for short tags like "ANIMATOR") overflows the slide width
+   once an item is a full sentence. Wraps normally at a smaller size
+   instead. */
+.tools-stack.long-items .bio-role {
+  white-space: normal;
+  font-size: 0.75em;
+  max-width: 26em;
+  text-align: center;
+}
+
+/* A too-generic/earlier draft of something, struck through and dimmed,
+   so a more specific replacement can sit right under it (week10's "a
+   moment, not a period" slide). Plain opt-in modifier, not tied to any
+   one tag. */
+.struck-text {
+  text-decoration: line-through;
+  opacity: 0.45;
+  font-weight: 400;
+}
+
+/* Underlined gap standing in for a blank in a fill-in-the-blank
+   statement, instead of literal underscore characters. */
+.blank-gap {
+  display: inline-block;
+  width: 5em;
+  border-bottom: 2px solid currentColor;
+  margin: 0 0.15em;
+  vertical-align: baseline;
+}

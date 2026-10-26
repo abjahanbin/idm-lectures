@@ -8,14 +8,375 @@
 <body>
   <div class="reveal">
     <div class="slides">
-      <section>
-        <span class="week-kicker">Week 10</span>
-        <h1>Lecture Title</h1>
+
+      <!-- ============================================================ -->
+      <!-- MOVEMENT 1 — Title                                            -->
+      <!-- ============================================================ -->
+
+      <!-- 1. Title slide (movement 1's divider). No data-movement-name,
+           same convention as week08/week01 slide 1. -->
+      <section class="impact-slide divider" data-movement="1">
+        <div class="impact-inner">
+          <h1>Interactive Digital Media</h1>
+          <p class="impact-byline">Week 10</p>
+        </div>
       </section>
-      <section>
-        <h2>Slide 2</h2>
-        <p>Content goes here.</p>
+
+      <!-- ============================================================ -->
+      <!-- MOVEMENT 2 — Where We've Been                                 -->
+      <!-- ============================================================ -->
+
+      <!-- 2. Divider — movement 2's entry card. -->
+      <section class="impact-slide divider" data-movement="2" data-movement-name="Recap" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <h2>Where we've been</h2>
+        </div>
       </section>
+
+      <!-- 3. So far — three-item recap, same stacked-highlight look as a
+           bio/tools slide (reuses .bio-role for each line). -->
+      <section class="impact-slide" data-movement="2" data-movement-name="Recap">
+        <div class="impact-inner">
+          <h2>So far</h2>
+          <div class="tools-stack">
+            <span class="bio-role bg-yellow">Emergence &mdash; Niagara</span>
+            <span class="bio-role bg-blue">Shaders &mdash; procedural textures</span>
+            <span class="bio-role bg-green">Audio synthesis &mdash; MetaSounds</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Bridge statement into the final project. -->
+      <section class="impact-slide" data-movement="2" data-movement-name="Recap">
+        <div class="impact-inner">
+          <p class="impact-statement">Next: one instrument.</p>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- MOVEMENT 3 — The Final Project                                -->
+      <!-- ============================================================ -->
+
+      <!-- 5. Divider — movement 3's entry card. -->
+      <section class="impact-slide divider" data-movement="3" data-movement-name="Final Project" style="--divider-color: var(--accent-green);">
+        <div class="impact-inner">
+          <h2>Final Project</h2>
+        </div>
+      </section>
+
+      <!-- 6. Project title + one-line description. -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Final Project" style="--divider-color: var(--accent-green);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">An Instrument of Memory</h3>
+          <p class="impact-byline">Recreate how a specific moment from your life felt</p>
+        </div>
+      </section>
+
+      <!-- 7. Reframing statement. Forced line break at the dash (rather
+           than leaving the wrap to chance) so the two halves split
+           cleanly instead of leaving a stray word on its own line. -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Final Project">
+        <div class="impact-inner">
+          <p class="impact-statement">Not what it looked like &mdash;<br>how it felt.</p>
+        </div>
+      </section>
+
+      <!-- 8. What the instrument includes — five-item stack, all five
+           accent colors used since there are 5 items now. -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Final Project">
+        <div class="impact-inner">
+          <h2>Your instrument</h2>
+          <div class="tools-stack">
+            <span class="bio-role bg-yellow">Sound &mdash; MetaSounds</span>
+            <span class="bio-role bg-blue">Visual &mdash; Niagara / Material</span>
+            <span class="bio-role bg-green">An Input</span>
+            <span class="bio-role bg-pink">A Connection</span>
+            <span class="bio-role bg-teal">A 2&ndash;3 Minute Performance</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Example memory — a statement with a smaller feeling-line
+           underneath (byline style). -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Final Project">
+        <div class="impact-inner">
+          <p class="impact-statement">Lying awake during a summer thunderstorm at my grandmother's house.</p>
+          <p class="impact-byline">Safe, but on edge.</p>
+        </div>
+      </section>
+
+      <!-- 10. Example translation — three side-by-side columns. No
+           existing class did this, so .three-col-layout/.three-col-item/
+           .three-col-heading are new opt-in classes (see the comment
+           block at the end of theme.css). --divider-color set to match
+           this movement so the column headings pick up the green. -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Final Project" style="--divider-color: var(--accent-green);">
+        <div class="impact-inner">
+          <div class="three-col-layout">
+            <div class="three-col-item">
+              <h4 class="three-col-heading">Sound</h4>
+              <p>Low drone for the fan</p>
+              <p>Filtered noise for rain</p>
+              <p>A burst of notes for lightning</p>
+            </div>
+            <div class="three-col-item">
+              <h4 class="three-col-heading">Visual</h4>
+              <p>Dark, slow swarm in deep blue</p>
+              <p>A white flash that scatters it</p>
+            </div>
+            <div class="three-col-item">
+              <h4 class="three-col-heading">Input</h4>
+              <p>Microphone</p>
+              <p>Breath controls the rain</p>
+              <p>A sharp sound triggers lightning</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. Inputs — tools-stack, byline underneath lists the
+           exceptions/fallback. -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Final Project">
+        <div class="impact-inner">
+          <h2>Play it with</h2>
+          <div class="tools-stack">
+            <span class="bio-role bg-yellow">Gamepad</span>
+            <span class="bio-role bg-blue">Microphone</span>
+            <span class="bio-role bg-green">MIDI Controller</span>
+          </div>
+          <p class="impact-byline">Others with approval &middot; keyboard as a secondary control only</p>
+        </div>
+      </section>
+
+      <!-- 12. Closing statement for the project movement. Non-breaking
+           space before the last word so it doesn't wrap down onto its
+           own line. -->
+      <section class="impact-slide" data-movement="3" data-movement-name="Final Project">
+        <div class="impact-inner">
+          <p class="impact-statement">The gesture should feel like the&nbsp;memory.</p>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- MOVEMENT 4 — The Assignment                                   -->
+      <!-- ============================================================ -->
+
+      <!-- 13. Divider — movement 4's entry card. -->
+      <section class="impact-slide divider" data-movement="4" data-movement-name="Assignment" style="--divider-color: var(--accent-teal);">
+        <div class="impact-inner">
+          <h2>Part 1: Concept Presentation</h2>
+        </div>
+      </section>
+
+      <!-- 14. Due date. -->
+      <section class="impact-slide" data-movement="4" data-movement-name="Assignment" style="--divider-color: var(--accent-teal);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">Due Week 11</h3>
+          <p class="impact-byline">Monday, November 2 &middot; start of class</p>
+        </div>
+      </section>
+
+      <!-- 15. The four steps. -->
+      <section class="impact-slide" data-movement="4" data-movement-name="Assignment">
+        <div class="impact-inner">
+          <h2>What to do</h2>
+          <div class="tools-stack">
+            <span class="bio-role bg-yellow">1. Choose a memory</span>
+            <span class="bio-role bg-blue">2. Translate it</span>
+            <span class="bio-role bg-green">3. Find precedents</span>
+            <span class="bio-role bg-pink">4. Decide your input</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 16. "A moment, not a period." — a too-generic memory struck
+           through, replaced by the specific one. .struck-text is a new
+           opt-in class (see theme.css) — line-through + dimmed, reusable
+           for any "this, not that" contrast later. -->
+      <section class="impact-slide" data-movement="4" data-movement-name="Assignment" style="--divider-color: var(--accent-teal);">
+        <div class="impact-inner">
+          <h2 class="struck-text">Summer at my grandmother's house</h2>
+          <h3 class="title-highlight">Lying awake during a thunderstorm at my grandmother's house</h3>
+        </div>
+      </section>
+
+      <!-- 17. Precedents requirement. -->
+      <section class="impact-slide" data-movement="4" data-movement-name="Assignment" style="--divider-color: var(--accent-teal);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">2 audio + 2 visual</h3>
+          <p class="impact-byline">Songs, artworks, films, games &middot; what are you taking from each?</p>
+        </div>
+      </section>
+
+      <!-- 18. Presentation format. -->
+      <section class="impact-slide" data-movement="4" data-movement-name="Assignment" style="--divider-color: var(--accent-teal);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">5&ndash;7 slides &middot; 3&ndash;4 minutes</h3>
+          <p class="impact-byline">Memory &middot; Audio precedents &middot; Visual precedents &middot; Translation &middot; Input</p>
+        </div>
+      </section>
+
+      <!-- 19. Submission. -->
+      <section class="impact-slide" data-movement="4" data-movement-name="Assignment" style="--divider-color: var(--accent-teal);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">PDF on Canvas + present in class</h3>
+          <p class="impact-byline">Full details are on Canvas</p>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- MOVEMENT 5 — Break                                            -->
+      <!-- ============================================================ -->
+
+      <!-- 20. Break — same bare, solid-color-fill pattern as week01's
+           break slide (no divider class, no WebGL background). -->
+      <section class="impact-slide" data-movement="5" data-movement-name="Break" data-background-color="#00e58e"></section>
+
+      <!-- ============================================================ -->
+      <!-- MOVEMENT 6 — Exercise                                         -->
+      <!-- ============================================================ -->
+
+      <!-- 21. Divider — opts into the Truchet background (not the
+           deck-wide Voronoi default) so this exercise reads as visually
+           distinct from the other dividers. -->
+      <section class="impact-slide divider" data-bg="truchet" data-movement="6" data-movement-name="Exercise" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <h2>Memory &rarr; Instrument</h2>
+        </div>
+      </section>
+
+      <!-- 22. Framing statement before the steps start. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise">
+        <div class="impact-inner">
+          <p class="impact-statement">You choose what you share.</p>
+        </div>
+      </section>
+
+      <!-- 23. Step 1 heading. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">1 &middot; Fast list</h3>
+          <p class="impact-byline">5 minutes &middot; alone &middot; silent &middot; five moments, one line each</p>
+        </div>
+      </section>
+
+      <!-- 24. Step 1 prompts — all five visible at once so students can
+           write while this is up. .tools-stack.long-items is a new opt-in
+           modifier (see theme.css) since these are full phrases, not
+           short tags, and would overflow .bio-role's default nowrap
+           sizing. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise">
+        <div class="impact-inner">
+          <div class="tools-stack long-items">
+            <span class="bio-role bg-yellow">A time you were waiting for something</span>
+            <span class="bio-role bg-blue">A place whose sound you can still hear</span>
+            <span class="bio-role bg-green">A moment when the weather mattered</span>
+            <span class="bio-role bg-pink">The first night somewhere new</span>
+            <span class="bio-role bg-teal">A time you couldn't sleep</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 25. Step 2 heading. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">2 &middot; Sensory inventory</h3>
+          <p class="impact-byline">5 minutes &middot; pick one moment</p>
+        </div>
+      </section>
+
+      <!-- 26. Three columns — reuses .three-col-layout from slide 10,
+           headings only this time, plus one line underneath. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <div class="three-col-layout">
+            <div class="three-col-item"><h4 class="three-col-heading">Heard</h4></div>
+            <div class="three-col-item"><h4 class="three-col-heading">Saw</h4></div>
+            <div class="three-col-item"><h4 class="three-col-heading">Felt in my body</h4></div>
+          </div>
+          <p class="impact-byline">Then name the feeling.</p>
+        </div>
+      </section>
+
+      <!-- 27. Step 3 heading. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">3 &middot; Translator swap</h3>
+          <p class="impact-byline">10 minutes &middot; pairs &middot; read your columns, not the story</p>
+        </div>
+      </section>
+
+      <!-- 28. Vocabulary — 14 short items, two columns (existing
+           .tools-stack.two-column modifier, no new CSS needed). -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise">
+        <div class="impact-inner">
+          <div class="tools-stack two-column">
+            <span class="bio-role bg-yellow">Tempo</span>
+            <span class="bio-role bg-blue">Rhythm</span>
+            <span class="bio-role bg-green">Pitch</span>
+            <span class="bio-role bg-pink">Density</span>
+            <span class="bio-role bg-teal">Filter</span>
+            <span class="bio-role bg-yellow">Envelope</span>
+            <span class="bio-role bg-blue">Delay</span>
+            <span class="bio-role bg-green">Silence</span>
+            <span class="bio-role bg-pink">Color</span>
+            <span class="bio-role bg-teal">Movement</span>
+            <span class="bio-role bg-yellow">Speed</span>
+            <span class="bio-role bg-blue">Scale</span>
+            <span class="bio-role bg-green">Light</span>
+            <span class="bio-role bg-pink">Swarm</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 29. Step 4 heading. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">4 &middot; Second draft</h3>
+          <p class="impact-byline">10 minutes &middot; alone &middot; no software</p>
+        </div>
+      </section>
+
+      <!-- 30. Three lines — reuses .three-col-layout again, headings
+           only, plus one line underneath. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <div class="three-col-layout">
+            <div class="three-col-item"><h4 class="three-col-heading">Sound</h4></div>
+            <div class="three-col-item"><h4 class="three-col-heading">Visual</h4></div>
+            <div class="three-col-item"><h4 class="three-col-heading">Input</h4></div>
+          </div>
+          <p class="impact-byline">Rewrite each in one line, using what your partner heard.</p>
+        </div>
+      </section>
+
+      <!-- 31. Step 5 heading. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">5 &middot; Share</h3>
+          <p class="impact-byline">5 minutes &middot; three or four volunteers</p>
+        </div>
+      </section>
+
+      <!-- 32. Fill-in-the-blank sentence — the blanks are rendered as
+           underlined gaps (.blank-gap, new opt-in class, see theme.css),
+           not literal underscores. text-compact since this is a longer
+           sentence than the default .impact-statement sizing comfortably
+           wraps. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise">
+        <div class="impact-inner">
+          <p class="impact-statement text-compact">My memory is <span class="blank-gap"></span>, it feels like <span class="blank-gap"></span>, and I might play it with <span class="blank-gap"></span>.</p>
+        </div>
+      </section>
+
+      <!-- 33. Closing. -->
+      <section class="impact-slide" data-movement="6" data-movement-name="Exercise" style="--divider-color: var(--accent-blue);">
+        <div class="impact-inner">
+          <h3 class="title-highlight">Next week: concept presentations</h3>
+          <p class="impact-byline">Bring your slides &middot; test your audio clips</p>
+        </div>
+      </section>
+
     </div>
   </div>
   <script type="module" src="./main.js"></script>
